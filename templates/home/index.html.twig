@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Filument Foundry{% endblock %}
+
+{% block stylesheets %}
+  <style>
+    body {
+      font-family: 'HK Grotesk', sans-serif;
+      background-color: #F4ECE4; /* Linen */
+      color: #1E1E18; /* Eerie */
+    }
+    h1, h2, h3 {
+      font-weight: 800; /* ExtraBold */
+    }
+  </style>
+{% endblock %}
+
+{% block body %}
+
+  <!-- Navbar -->
+  <nav class="bg-[#1E1E18] text-white px-6 py-4 flex justify-between items-center">
+    <div class="text-2xl font-extrabold">Filument Foundry</div>
+    <ul class="flex gap-6">
+      <li><a href="{{ path('home_index') }}" class="hover:text-[#129CDD]">Home</a></li>
+      <li><a class="hover:text-[#129CDD]">Materials</a></li>
+      <li><a class="hover:text-[#129CDD]">About Us</a></li>
+      <li><a class="hover:text-[#129CDD]">Upload</a></li>
+      <li><a class="hover:text-[#129CDD]">My Cart</a></li>
+      <li><a class="hover:text-[#129CDD]">Sign In</a></li>
+      <li>
+        <a class="bg-[#FBA503] text-black px-4 py-2 rounded-lg font-bold hover:bg-[#129CDD] hover:text-white">
+          Get Instant Quote
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="text-center py-20 px-6">
+    <h1 class="text-5xl font-extrabold mb-6">Turning Digital Dreams into Physical Reality</h1>
+    <p class="max-w-2xl mx-auto text-lg mb-8">
+      On-demand 3D printing services for individuals, businesses, and schools. 
+      Upload your 3D model, choose materials, and let us handle the printing, finishing, and delivery.
+    </p>
+    <a class="bg-[#129CDD] text-white px-6 py-3 rounded-lg font-bold hover:bg-[#FBA503] hover:text-black">
+      Upload Your Design
+    </a>
+  </section>
+
+  <!-- Services Section -->
+  <section class="py-16 px-8 bg-white">
+    <h2 class="text-3xl font-extrabold text-center mb-10">Our Core Services</h2>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 text-center">
+      <div class="p-6 border rounded-xl shadow">
+        <h3 class="font-bold text-xl mb-3">Custom 3D Printing</h3>
+        <p>Print prototypes, replacement parts, art pieces, and more with precision and quality.</p>
+      </div>
+      <div class="p-6 border rounded-xl shadow">
+        <h3 class="font-bold text-xl mb-3">Material Variety</h3>
+        <p>Choose from PLA, ABS, PETG, resin, carbon fiber, TPU, and more.</p>
+      </div>
+      <div class="p-6 border rounded-xl shadow">
+        <h3 class="font-bold text-xl mb-3">Finishing Services</h3>
+        <p>Professional sanding, painting, and coating to make your print production-ready.</p>
+      </div>
+      <div class="p-6 border rounded-xl shadow">
+        <h3 class="font-bold text-xl mb-3">Rapid Prototyping</h3>
+        <p>Accelerate your product development with quick and affordable prototyping.</p>
+      </div>
+      <div class="p-6 border rounded-xl shadow">
+        <h3 class="font-bold text-xl mb-3">Educational Support</h3>
+        <p>Accessible 3D printing for schools, universities, and STEM projects.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-[#1E1E18] text-white py-8 text-center">
+    <p>&copy; 2025 Filument Foundry — Empowering innovation through 3D printing.</p>
+  </footer>
+
+{% endblock %}
