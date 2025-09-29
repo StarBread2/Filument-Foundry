@@ -1,0 +1,41 @@
+#https://chatgpt.com/c/68da2405-2b00-8328-8336-c8ba66181d61
+#Containers (transfer configurations to other machine)
+#docker file instucts to install dependencies
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: symfony_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: symfonyTest
+      MYSQL_USER: mikey
+      MYSQL_PASSWORD: mikey
+    ports:
+      - "3306:3306"
+    volumes: #location of the container
+      - symfonyTest:/var/lib/mysql
+    networks: #if multiple machine
+      - symfony_network
+    restart: always
+
+  #pasunod og run
+  phpmyadmin:
+    image: phpmyadmin:5.2
+    container_name: symfony_phpmyadmin
+    depends_on:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+    ports:
+      - "8888:80"
+    networks:
+      - symfony_network
+    restart: always
+
+
+volumes:
+  symfonyTest:
+
+networks:
+  symfony_network:
