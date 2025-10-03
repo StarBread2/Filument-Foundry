@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Cart{% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-4xl font-extrabold mb-8">My Cart</h1>
+
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <table class="min-w-full">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Filename</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Material</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Finish</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Color</th>
+                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+            {% for user_order in user_orders %}
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{{ user_order.filename }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">{{ user_order.material ? user_order.material.name : 'N/A' }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">{{ user_order.finish ? user_order.finish.name : 'N/A' }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">{{ user_order.color ? user_order.color.name : 'N/A' }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        {# <a href="{{ path('app_my_cart_show', {'id': user_order.id}) }}" class="text-[#129CDD] hover:text-[#1E1E18] mr-4">Show</a> #}
+                        <a href="{{ path('app_my_cart_edit', {'id': user_order.id}) }}" class="text-[#129CDD] hover:text-[#1E1E18]">Edit</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center py-10 text-gray-500">Your cart is empty.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-8 flex justify-end">
+        <a href="{{ path('app_my_cart_new') }}" class="bg-[#FBA503] text-black px-6 py-3 rounded-lg font-bold hover:bg-[#129CDD] hover:text-white transition-colors duration-300">
+            Add New Item
+        </a>
+    </div>
+</div>
+{% endblock %}

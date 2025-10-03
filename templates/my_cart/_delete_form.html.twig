@@ -1,0 +1,11 @@
+<form method="post" action="{{ path('app_my_cart_delete', {'id': user_order.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user_order.id) }}">
+    <button 
+        type="submit"
+        class="bg-[#FBA503] text-black px-6 py-3 rounded-lg font-bold 
+            hover:bg-[#129CDD] hover:text-white 
+            transition-colors duration-300 shadow-md"
+    >
+        Delete
+    </button>
+</form>
