@@ -8,8 +8,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: admin
       MYSQL_DATABASE: symfonyTest
-      MYSQL_USER: mikey
-      MYSQL_PASSWORD: mikey
+      MYSQL_USER: ${MYSQL_user}
+      MYSQL_PASSWORD: ${MYSQL_password}
     ports:
       - "3306:3306"
     volumes: #location of the container
