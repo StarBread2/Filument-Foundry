@@ -2,81 +2,70 @@
 
 {% block title %}Filument Foundry{% endblock %}
 
-{% block stylesheets %}
-  <style>
-    body {
-      font-family: 'HK Grotesk', sans-serif;
-      background-color: #F4ECE4; /* Linen */
-      color: #1E1E18; /* Eerie */
-    }
-    h1, h2, h3 {
-      font-weight: 800; /* ExtraBold */
-    }
-  </style>
-{% endblock %}
-
 {% block body %}
-
-  <!-- Navbar -->
-  <nav class="bg-[#1E1E18] text-white px-6 py-4 flex justify-between items-center">
-    <div class="text-2xl font-extrabold">Filument Foundry</div>
-    <ul class="flex gap-6">
-      <li><a href="{{ path('home_index') }}" class="hover:text-[#129CDD]">Home</a></li>
-      <li><a class="hover:text-[#129CDD]">Materials</a></li>
-      <li><a class="hover:text-[#129CDD]">About Us</a></li>
-      <li><a class="hover:text-[#129CDD]">Upload</a></li>
-      <li><a href="{{ path('app_my_cart_index') }}" class="hover:text-[#129CDD]">My Cart</a></li>
-      <li><a class="hover:text-[#129CDD]">Sign In</a></li>
-      <li>
-        <a class="bg-[#FBA503] text-black px-4 py-2 rounded-lg font-bold hover:bg-[#129CDD] hover:text-white">
-          Get Instant Quote
-        </a>
-      </li>
-    </ul>
-  </nav>
+  {% include 'partials/navbar.html.twig' %}
+  
 
   <!-- Hero Section -->
-  <section class="text-center py-20 px-6">
-    <h1 class="text-5xl font-extrabold mb-6">Turning Digital Dreams into Physical Reality</h1>
-    <p class="max-w-2xl mx-auto text-lg mb-8">
-      On-demand 3D printing services for individuals, businesses, and schools. 
-      Upload your 3D model, choose materials, and let us handle the printing, finishing, and delivery.
-    </p>
-    <a class="bg-[#129CDD] text-white px-6 py-3 rounded-lg font-bold hover:bg-[#FBA503] hover:text-black">
-      Upload Your Design
-    </a>
-  </section>
+  <section class="bg-[#f5ede5] py-20">
+    <div class="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center">
+      <!-- Left Text -->
+      <div class="space-y-6">
+        <h1 class="text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight">
+          Turning digital dreams into physical reality
+        </h1>
+        <p class="text-lg text-gray-700 max-w-xl">
+          Professional 3D printing services for artists, engineers, students, and innovators.
+          From prototypes to final products, we bring your ideas to life with precision and quality.
+        </p>
 
-  <!-- Services Section -->
-  <section class="py-16 px-8 bg-white">
-    <h2 class="text-3xl font-extrabold text-center mb-10">Our Core Services</h2>
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 text-center">
-      <div class="p-6 border rounded-xl shadow">
-        <h3 class="font-bold text-xl mb-3">Custom 3D Printing</h3>
-        <p>Print prototypes, replacement parts, art pieces, and more with precision and quality.</p>
+        <div class="flex flex-col sm:flex-row gap-4 pt-2">
+          <button class="bg-blue-500 hover:bg-blue-600 text-white px-5 py-3 rounded-md font-medium flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v16h16V8l-6-4H4z" />
+            </svg>
+            Upload & Print Now
+          </button>
+
+          <button class="border border-gray-400 px-5 py-3 rounded-md font-medium flex items-center gap-2 text-gray-700 hover:bg-gray-100">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-4.197-2.42A1 1 0 009 9.579v4.842a1 1 0 001.555.832l4.197-2.42a1 1 0 000-1.664z" />
+            </svg>
+            See How It Works
+          </button>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-3 gap-8 pt-8 border-t border-gray-300 max-w-md">
+          <div>
+            <div class="text-2xl font-bold text-blue-600">10K+</div>
+            <p class="text-sm text-gray-600">Projects Printed</p>
+          </div>
+          <div>
+            <div class="text-2xl font-bold text-blue-600">48h</div>
+            <p class="text-sm text-gray-600">Average Delivery</p>
+          </div>
+          <div>
+            <div class="text-2xl font-bold text-blue-600">15+</div>
+            <p class="text-sm text-gray-600">Material Options</p>
+          </div>
+        </div>
       </div>
-      <div class="p-6 border rounded-xl shadow">
-        <h3 class="font-bold text-xl mb-3">Material Variety</h3>
-        <p>Choose from PLA, ABS, PETG, resin, carbon fiber, TPU, and more.</p>
-      </div>
-      <div class="p-6 border rounded-xl shadow">
-        <h3 class="font-bold text-xl mb-3">Finishing Services</h3>
-        <p>Professional sanding, painting, and coating to make your print production-ready.</p>
-      </div>
-      <div class="p-6 border rounded-xl shadow">
-        <h3 class="font-bold text-xl mb-3">Rapid Prototyping</h3>
-        <p>Accelerate your product development with quick and affordable prototyping.</p>
-      </div>
-      <div class="p-6 border rounded-xl shadow">
-        <h3 class="font-bold text-xl mb-3">Educational Support</h3>
-        <p>Accessible 3D printing for schools, universities, and STEM projects.</p>
+
+      <!-- Right Image -->
+      <div class="relative">
+        <img
+          src="https://images.unsplash.com/photo-1608564697071-fbf3c9d48c62"
+          alt="3D printer"
+          class="rounded-2xl shadow-2xl object-cover w-full h-[480px]"
+        />
+        <span class="absolute top-4 right-4 bg-yellow-500 text-white text-sm font-semibold px-4 py-1 rounded-md shadow-md">
+          Premium Quality
+        </span>
+        <span class="absolute bottom-4 left-4 bg-blue-500 text-white text-sm font-semibold px-4 py-1 rounded-md shadow-md">
+          Fast Turnaround
+        </span>
       </div>
     </div>
   </section>
-
-  <!-- Footer -->
-  <footer class="bg-[#1E1E18] text-white py-8 text-center">
-    <p>&copy; 2025 Filument Foundry — Empowering innovation through 3D printing.</p>
-  </footer>
-
 {% endblock %}
