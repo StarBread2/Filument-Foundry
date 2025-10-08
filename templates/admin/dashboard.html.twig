@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AdminController!{% endblock %}
+
+{% block body %}
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col bg-[#f5ede5]">
+        <!-- Dashboard content -->
+        <main class="p-6 space-y-6">
+            <!-- Header -->
+            <div class="space-y-2">
+                <h1 class="text-3xl font-extrabold text-gray-900 mb-0">Dashboard</h1>
+                <p class="text-gray-600 text-base mt-0">Overview of your 3D printing business</p>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="bg-white rounded-lg p-4 shadow">
+                    <h3 class="text-gray-500 text-sm">Total Orders</h3>
+                    <p class="text-2xl font-bold">1,234</p>
+                    <p class="text-green-600 text-sm">+12% from last month</p>
+                </div>
+                <div class="bg-white rounded-lg p-4 shadow">
+                    <h3 class="text-gray-500 text-sm">Revenue</h3>
+                    <p class="text-2xl font-bold">₱456,789</p>
+                    <p class="text-green-600 text-sm">+8% from last month</p>
+                </div>
+                <div class="bg-white rounded-lg p-4 shadow">
+                    <h3 class="text-gray-500 text-sm">Active Projects</h3>
+                    <p class="text-2xl font-bold">87</p>
+                    <p class="text-red-600 text-sm">-3% from last month</p>
+                </div>
+                <div class="bg-white rounded-lg p-4 shadow">
+                    <h3 class="text-gray-500 text-sm">Growth Rate</h3>
+                    <p class="text-2xl font-bold">23%</p>
+                    <p class="text-green-600 text-sm">+5% from last month</p>
+                </div>
+            </div>
+
+            <!-- Lower Section -->
+            <div class="flex flex-col md:flex-row gap-6">
+                <!-- Order Status -->
+                <div class="bg-white rounded-lg p-4 shadow w-full md:w-[400px]">
+                    <h3 class="text-lg font-semibold mb-4">Order Status Overview</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li>🟠 Pending <span class="float-right">15</span></li>
+                        <li>🔵 In Progress <span class="float-right">32</span></li>
+                        <li>✅ Completed <span class="float-right">156</span></li>
+                        <li>❌ Cancelled <span class="float-right">3</span></li>
+                    </ul>
+                </div>
+
+                <!-- Recent Orders -->
+                <div class="bg-white rounded-lg p-4 shadow flex-1">
+                    <h3 class="text-lg font-semibold mb-4">Recent Orders</h3>
+                    <ul class="space-y-3">
+                        <li class="flex justify-between items-center border-b pb-2">
+                            <div>
+                                <p class="font-bold">ORD-001</p>
+                                <p class="text-sm text-gray-500">John Doe • PLA • 2024-01-15</p>
+                            </div>
+                            <span class="text-sm font-semibold text-blue-600">In Progress</span>
+                            <span class="font-bold">₱2,450</span>
+                        </li>
+                        <li class="flex justify-between items-center border-b pb-2">
+                            <div>
+                                <p class="font-bold">ORD-002</p>
+                                <p class="text-sm text-gray-500">Jane Smith • ABS • 2024-01-14</p>
+                            </div>
+                            <span class="text-sm font-semibold text-green-600">Completed</span>
+                            <span class="font-bold">₱3,200</span>
+                        </li>
+                        <!-- Add more orders here -->
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+</div> <!-- NABILIN NA CLOSE FOR LEFT SIDEBAR -->
+
+{% endblock %}

@@ -13,6 +13,34 @@
         {% endblock %}
     </head>
     <body>
+
+        <!-- Nav Bar -->
+        <!-- Nav Bar for admin and default web -->
+        <!-- Nav Bar admin NAAY WALA NA CLOSE NA DIV!!!!, (CLOSE EVERY MAIN CONTENT)-->
+        {% set admin_routes = [
+            'admin_dashboard', 'admin_orders', 'admin_products',
+            'admin_materials', 'admin_finishes', 'admin_colors', 'admin_settings'
+        ] %}
+
+        {% if app.request.attributes.get('_route') in admin_routes %}
+            {% include 'partials/navbarAdmin.html.twig' %}
+        {% else %}
+            {% include 'partials/navbar.html.twig' %}
+        {% endif %}
+
         {% block body %}{% endblock %}
+
+        <!-- Admin Button -->
+        <!-- Changes the button if home = "go to admin" else "go back to web" -->
+        {% if app.request.attributes.get('_route') not in admin_routes %}
+            <a href="{{ path('admin_dashboard') }}" 
+            class="fixed bottom-12 right-4 
+                    text-black font-semibold px-4 py-2 rounded-md 
+                    bg-[rgb(251,165,3)] hover:bg-[rgb(252,175,36)] 
+                    transition-colors shadow-lg">
+                    Admin Panel
+            </a>
+        {% endif %}
+
     </body>
 </html>

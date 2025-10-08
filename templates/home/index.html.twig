@@ -4,10 +4,6 @@
 
 {% block body %}
 
-  <!-- Nav Bar -->
-  {% include 'partials/navbar.html.twig' %}
-  
-
   <!-- Hero Section -->
   <section class="bg-[#f5ede5] py-20">
     <div class="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center">
@@ -22,52 +18,52 @@
         </p>
 
         <div class="flex flex-col sm:flex-row gap-4 pt-2">
-          <button class="bg-blue-500 hover:bg-blue-600 text-white px-5 py-3 rounded-md font-medium flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v16h16V8l-6-4H4z" />
-            </svg>
+          <button class="bg-[rgb(18,156,221)] hover:bg-[rgb(41,176,240)] 
+            text-white px-5 py-3 rounded-md font-medium 
+            flex items-center gap-2 transition-colors">
+            <img src="{{ asset('images/hero section/Upload White.svg') }}" alt="Upload Icon" class="w-4 h-4">
             Upload & Print Now
           </button>
 
-          <button class="border border-gray-400 px-5 py-3 rounded-md font-medium flex items-center gap-2 text-gray-700 hover:bg-gray-100">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-4.197-2.42A1 1 0 009 9.579v4.842a1 1 0 001.555.832l4.197-2.42a1 1 0 000-1.664z" />
-            </svg>
-            See How It Works
+          <button class="border border-gray-400 px-5 py-3 rounded-md font-medium flex items-center gap-2 text-black
+            hover:bg-[rgb(251,165,3)] transition-colors">
+              <img src="{{ asset('images/hero section/Play.svg') }}" alt="Play Icon" class="w-4 h-4">
+              See How It Works
           </button>
         </div>
 
         <!-- Stats -->
         <div class="grid grid-cols-3 gap-8 pt-8 border-t border-gray-300 max-w-md">
           <div>
-            <div class="text-2xl font-bold text-blue-600">10K+</div>
-            <p class="text-sm text-gray-600">Projects Printed</p>
-          </div>
-          <div>
-            <div class="text-2xl font-bold text-blue-600">48h</div>
-            <p class="text-sm text-gray-600">Average Delivery</p>
-          </div>
-          <div>
-            <div class="text-2xl font-bold text-blue-600">15+</div>
-            <p class="text-sm text-gray-600">Material Options</p>
+            <div class="text-2xl font-bold text-[rgb(18,156,221)]">10K+</div>
+              <p class="text-sm text-gray-600">Projects Printed</p>
+            </div>
+            <div>
+              <div class="text-2xl font-bold text-[rgb(18,156,221)]">48h</div>
+              <p class="text-sm text-gray-600">Average Delivery</p>
+            </div>
+            <div>
+              <div class="text-2xl font-bold text-[rgb(18,156,221)]">15+</div>
+              <p class="text-sm text-gray-600">Material Options</p>
+            </div>
           </div>
         </div>
-      </div>
 
       <!-- Right Image -->
       <div class="relative">
         <img
-          src="https://images.unsplash.com/photo-1608564697071-fbf3c9d48c62"
+          src="{{ asset('images/hero section/Hero Page.jfif') }}"
           alt="3D printer"
           class="rounded-2xl shadow-2xl object-cover w-full h-[480px]"
         />
-        <span class="absolute top-4 right-4 bg-yellow-500 text-white text-sm font-semibold px-4 py-1 rounded-md shadow-md">
+        <span class="absolute top-4 right-4 bg-[rgb(251,165,3)] text-black text-sm font-semibold px-4 py-1.5 rounded-md shadow-md">
           Premium Quality
         </span>
-        <span class="absolute bottom-4 left-4 bg-blue-500 text-white text-sm font-semibold px-4 py-1 rounded-md shadow-md">
+        <span class="absolute bottom-4 left-4 bg-[rgb(18,156,221)] text-white text-sm font-semibold px-4 py-1.5 rounded-md shadow-md">
           Fast Turnaround
         </span>
       </div>
     </div>
   </section>
+  
 {% endblock %}

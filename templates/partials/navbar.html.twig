@@ -1,54 +1,74 @@
 <nav class="bg-white border-b border-gray-200 shadow-sm">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-between items-center h-16">
-      <!-- Logo -->
-      <img src="{{ asset('images/logo 1.svg') }}"
-        alt="Filument Foundry Logo"
-        class="h-16 sm:h-16 md:h-16 lg:h-16 pt-2 w-auto transition-all duration-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <!-- Logo -->
+            <a href="{{ path('home_index') }}">
+                <img src="{{ asset('images/navbar/logo 1.svg') }}"
+                    alt="Filument Foundry Logo"
+                    class="h-16 sm:h-16 md:h-16 lg:h-16 pt-2 w-auto transition-all duration-200">
+            </a>
 
-      <!-- Mobile menu button -->
-      <button id="menu-btn"
-        class="md:hidden flex items-center px-2 py-1 border rounded-md text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-yellow-500">
-        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-          stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
+            <!-- Mobile menu button -->
+            <button id="menu-btn"
+                class="md:hidden flex items-center px-2 py-1 border rounded-md text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
 
-      <!-- Desktop Nav Links -->
-      <div class="hidden md:flex items-center space-x-8 text-gray-800">
-        <a href="#home" class="hover:text-yellow-600 transition-colors">Home</a>
-        <a href="#materials" class="hover:text-yellow-600 transition-colors">Materials</a>
-        <a href="#about" class="hover:text-yellow-600 transition-colors">About Us</a>
-      </div>
+            <!-- Desktop Nav Links -->
+            <div class="hidden md:flex items-center space-x-8 text-gray-800">
+                <a href="#home" class="transition-colors hover:text-[rgb(18,156,221)]">Home</a>
+                <a href="#materials" class="transition-colors hover:text-[rgb(18,156,221)]">Materials</a>
+                <a href="#about" class="transition-colors hover:text-[rgb(18,156,221)]">About Us</a>
+            </div>
 
-      <!-- Desktop Buttons -->
-      <div class="hidden md:flex items-center gap-3">
-        <button class="flex items-center gap-2 border rounded-md px-3 py-1 text-sm hover:bg-gray-100">
-          Upload
-        </button>
-        <button class="bg-yellow-500 hover:bg-yellow-400 text-white font-semibold px-4 py-2 rounded-md">
-          Get Instant Quote
-        </button>
-      </div>
-    </div>
+            <!-- Desktop Buttons -->
+            <div class="hidden md:flex items-center gap-3">
+                <button class="flex items-center gap-2 rounded-md px-3 py-1 text-sm 
+                    border bg-[rgb(244,236,228)] hover:bg-[rgb(251,165,3)] transition-colors">
+                    <img src="{{ asset('images/navbar/Upload.svg') }}" alt="Upload Icon" class="w-4 h-4">
+                    Upload
+                </button>
+
+                <button class="flex items-center gap-2 rounded-md px-3 py-1 text-sm 
+                    bg-transparent hover:bg-[rgb(251,165,3)] transition-colors focus:outline-none">
+                    <img src="{{ asset('images/navbar/My Cart.svg') }}" alt="My Cart Icon" class="w-4 h-4">
+                    My Cart
+                </button>
+
+                
+                <button class="flex items-center gap-2 rounded-md px-3 py-1 text-sm 
+                    bg-transparent hover:bg-[rgb(251,165,3)] transition-colors focus:outline-none">
+                    <img src="{{ asset('images/navbar/Log In.svg') }}" alt="Sign In Icon" class="w-4 h-4">
+                    Sign In
+                </button>       
+
+                <button class="text-black font-semibold px-4 py-2 rounded-md 
+                    bg-[rgb(251,165,3)] hover:bg-[rgb(252,175,36)] transition-colors">
+                    Get Instant Quote
+                </button>
+            </div>
+        </div>
 
     <!-- Mobile Dropdown -->
-    <div
-      id="mobile-menu"
-      class="hidden flex flex-col space-y-3 pb-4 transition-all duration-300 ease-in-out opacity-0 md:hidden"
-    >
-      <a href="#home" class="block text-gray-800 hover:text-yellow-600">Home</a>
-      <a href="#materials" class="block text-gray-800 hover:text-yellow-600">Materials</a>
-      <a href="#about" class="block text-gray-800 hover:text-yellow-600">About Us</a>
-
-      <div class="pt-2 flex flex-col space-y-2">
-        <button class="w-full border rounded-md px-3 py-2 text-sm hover:bg-gray-100">Upload</button>
-        <button class="w-full bg-yellow-500 hover:bg-yellow-400 text-white font-semibold px-4 py-2 rounded-md">
-          Get Instant Quote
-        </button>
-      </div>
+        <div
+            id="mobile-menu"
+            class="hidden flex flex-col space-y-3 pb-4 transition-all duration-300 ease-in-out opacity-0 md:hidden"
+            >
+                <a href="{{ path('home_index') }}" class="block text-gray-800 hover:text-yellow-600">Home</a>
+                <a href="#materials" class="block text-gray-800 hover:text-yellow-600">Materials</a>
+                <a href="#about" class="block text-gray-800 hover:text-yellow-600">About Us</a>
+                <div class="pt-2 flex flex-col space-y-2">
+                    <button class="w-full border rounded-md px-3 py-2 text-sm hover:bg-gray-100">
+                        Upload
+                    </button>
+                    <button class="w-full bg-yellow-500 hover:bg-yellow-400 text-white font-semibold px-4 py-2 rounded-md">
+                        Get Instant Quote
+                    </button>
+                </div>
+        </div>
     </div>
-  </div>
 </nav>
