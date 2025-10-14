@@ -3,6 +3,7 @@
     <head>
         {{ encore_entry_link_tags('app') }}
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
         {% block stylesheets %}
@@ -13,12 +14,29 @@
         {% endblock %}
     </head>
     <body>
+        <!-- Admin Modals CURRENT ROUTE USED BY NAVBAR IS HERE -->
+        {% set currentRoute = app.request.attributes.get('_route') %}
+
+        {% set modals = 
+        {
+            'admin_dashboard': ['admin/partials/materials_modal.html.twig', 'admin/partials/finishes_modal.html.twig', 'admin/partials/colors_modal.html.twig'],
+            'admin_users': ['admin/partials/users_modal.html.twig'],
+            'admin_materials': ['admin/partials/materials_modal.html.twig'],
+            'admin_finishes': ['admin/partials/finishes_modal.html.twig'],
+            'admin_colors': ['admin/partials/colors_modal.html.twig']
+        } %}
+
+        {% if modals[currentRoute] is defined %}
+            {% for modal in modals[currentRoute] %}
+                {% include modal %}
+            {% endfor %}
+        {% endif %}
 
         <!-- Nav Bar -->
         <!-- Nav Bar for admin and default web -->
         <!-- Nav Bar admin NAAY WALA NA CLOSE NA DIV!!!!, (CLOSE EVERY MAIN CONTENT)-->
         {% set admin_routes = [
-            'admin_dashboard', 'admin_orders', 'admin_products',
+            'admin_dashboard', 'admin_orders', 'admin_products', 'admin_users',
             'admin_materials', 'admin_finishes', 'admin_colors', 'admin_settings'
         ] %}
 

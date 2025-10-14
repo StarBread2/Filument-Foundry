@@ -13,10 +13,7 @@
         </a>
 </header>
 
-<!-- GET CURRENT ROUTE (DEPENDING ON ACTIVEPAGE BUTTON WILL BE BLACK)-->
-{% set currentRoute = app.request.attributes.get('_route') %}
-
-
+{# CURRENTROUTE IN BASE HTML TWIG#}
 <!-- START OF DETAIL -->
 <div class="min-h-screen flex bg-gray-50">
     <!-- Left Navbar -->
@@ -38,10 +35,21 @@
                     {{ currentRoute == 'admin_orders' 
                     ? 'bg-black text-white' 
                     : 'bg-white text-black hover:bg-[rgb(251,165,3)]' }}">
-                    <img src="{{ asset('images/placeholder.svg') }}"
+                    <img src="{{ asset('images/admin navbar/orders.svg') }}"
                         alt="Orders Icon"
                         class="w-4 h-4 {{ currentRoute == 'admin_orders' ? 'invert brightness-0' : '' }}">
                     Orders
+                </a>
+
+                <a href="{{ path('admin_users') }}"
+                    class="flex items-center gap-2 px-3 py-2 rounded-md font-medium transition
+                    {{ currentRoute == 'admin_users' 
+                    ? 'bg-black text-white' 
+                    : 'bg-white text-black hover:bg-[rgb(251,165,3)]' }}">
+                    <img src="{{ asset('images/admin navbar/users.svg') }}"
+                        alt="Orders Icon"
+                        class="w-4 h-4 {{ currentRoute == 'admin_users' ? 'invert brightness-0' : '' }}">
+                    Users
                 </a>
 
                 <a href="{{ path('admin_materials') }}"
@@ -71,7 +79,7 @@
                     {{ currentRoute == 'admin_colors' 
                     ? 'bg-black text-white' 
                     : 'bg-white text-black hover:bg-[rgb(251,165,3)]' }}">
-                    <img src="{{ asset('images/placeholder.svg') }}"
+                    <img src="{{ asset('images/admin navbar/pallete.svg') }}"
                         alt="Colors Icon"
                         class="w-4 h-4 {{ currentRoute == 'admin_colors' ? 'invert brightness-0' : '' }}">
                     Colors
@@ -89,3 +97,4 @@
                 </a>
             </nav>
         </aside>
+    

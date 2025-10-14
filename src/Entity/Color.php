@@ -27,6 +27,15 @@ class Color
     #[ORM\OneToMany(targetEntity: UserOrder::class, mappedBy: 'color')]
     private Collection $userOrders;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $image_path = null;
+
+    #[ORM\Column]
+    private ?bool $availability = null;
+
+    #[ORM\Column(length: 7, nullable: true)]
+    private ?string $color_hex = null;
+
     public function __construct()
     {
         $this->userOrders = new ArrayCollection();
@@ -87,6 +96,42 @@ class Color
                 $userOrder->setColor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getImagePath(): ?string
+    {
+        return $this->image_path;
+    }
+
+    public function setImagePath(?string $imagePath): self
+    {
+        $this->image_path = $imagePath; 
+
+        return $this;
+    }
+
+    public function getAvailability(): ?bool
+    {
+        return $this->availability;
+    }
+
+    public function setAvailability(bool $availability): static
+    {
+        $this->availability = $availability;
+
+        return $this;
+    }
+
+    public function getColorHex(): ?string
+    {
+        return $this->color_hex;
+    }
+
+    public function setColorHex(?string $color_hex): static
+    {
+        $this->color_hex = $color_hex;
 
         return $this;
     }

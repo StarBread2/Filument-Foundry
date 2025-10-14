@@ -1,0 +1,207 @@
+<!-- ADD FINISH MODAL -->
+<div 
+    id="modal_addFinishes" 
+    class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden"
+>
+    <!-- Modal Box -->
+    <div class="bg-[#fdf5ef] rounded-xl shadow-lg p-6 w-full max-w-md relative">
+        <!-- Close Button -->
+        <button 
+            id="closeFinishModalBtn" 
+            class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-xl font-bold">
+            &times;
+        </button>
+
+        <h2 class="text-xl font-semibold mb-1">Add New Finish</h2>
+        <p class="text-sm text-gray-600 mb-4">Add finishing details for post-processing catalog</p>
+
+        <form method="POST" action="{{ path('admin_add_finish') }}" enctype="multipart/form-data" class="space-y-4">
+            <!-- Name -->
+            <div>
+                <label class="block text-sm font-medium mb-1">Finish Name *</label>
+                <input name="finish_name" type="text" required placeholder="e.g., Gloss, Matte, Polished"
+                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none">
+            </div>
+
+            <!-- Price -->
+            <div>
+                <label class="block text-sm font-medium mb-1">Price (₱) *</label>
+                <input name="price" type="number" required min="0" step="any" placeholder="e.g., 200"
+                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none">
+            </div>
+
+            <!-- Details -->
+            <div>
+                <label class="block text-sm font-medium mb-1">Details *</label>
+                <textarea name="details" required rows="3" placeholder="Describe the finish (e.g., texture, use case)"
+                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none"></textarea>
+            </div>
+
+            <!-- Properties -->
+            <div>
+                <label class="block text-sm font-medium mb-1">Properties (comma-separated)</label>
+                <input name="properties" type="text" placeholder="e.g., Smooth, Durable, UV Resistant"
+                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none">
+            </div>
+
+            <!-- Image Upload -->
+            <div>
+                <label class="block text-sm font-medium mb-1">Finish Image *</label>
+                <div 
+                    id="dropzoneFinish" 
+                    class="w-full border-2 border-dashed border-gray-300 rounded-md px-3 py-10 text-center cursor-pointer bg-white hover:bg-gray-50 transition"
+                >
+                    <p class="text-gray-500">Drag & drop an image here or click to browse</p>
+                    <p class="text-gray-500">(.jpeg, png, webp)</p>
+                    <input type="file" name="image" id="finishImageInput" accept="image/*" class="hidden">
+                    <img id="finishPreviewImage" class="mt-3 mx-auto max-h-40 hidden rounded-md" />
+                </div>
+            </div>
+
+            <!-- Availability -->
+            <div class="flex items-center gap-2">
+                <input type="checkbox" id="finishAvailable" name="available" class="w-4 h-4 text-orange-500 rounded focus:ring-orange-400">
+                <label for="finishAvailable" class="text-sm font-medium text-gray-700">Available for orders</label>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex justify-end space-x-3 pt-2">
+                <button type="button" id="closeFinishModalBtn2"
+                    class="px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-100">
+                    Cancel
+                </button>
+                <button type="submit"
+                    class="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800">
+                    Add Finish
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- DELETE CONFIRMATION MODAL -->
+<div 
+    id="deleteModal_finishes"
+    class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden"
+>
+    <div class="bg-[#fdf5ef] rounded-xl shadow-lg p-6 w-full max-w-sm text-center relative">
+        <button 
+            id="closeDeleteModal_finishes"
+            class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-xl font-bold">
+            &times;
+        </button>
+
+        <h2 class="text-lg font-semibold mb-2">Confirm Deletion</h2>
+        <p id="deleteMessageFinishes" class="text-sm text-gray-600 mb-5">
+            Are you sure you want to delete this finish?
+        </p>
+
+        <div class="flex justify-center gap-3">
+            <button 
+                id="cancelDeleteBtnFinishes"
+                class="px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-100">
+                Cancel
+            </button>
+            <form id="deleteFormFinishes" method="POST" action="">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete_finish') }}">
+                <button 
+                    type="submit"
+                    class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
+                    Delete
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- EDIT FINISH MODAL -->
+<div 
+    id="modal_editFinish" 
+    class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden"
+>
+    <div class="bg-[#fdf5ef] rounded-xl shadow-lg p-6 w-full max-w-md relative">
+        <!-- Close Button -->
+        <button 
+            id="closeEditModalBtn_finish" 
+            class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-xl font-bold">
+            &times;
+        </button>
+
+        <h2 class="text-xl font-semibold mb-1">Edit Finish</h2>
+        <p class="text-sm text-gray-600 mb-4">Update the finishing service details below</p>
+
+        <form id="editFinishForm" method="POST" action="" enctype="multipart/form-data" class="space-y-4">
+            <!-- Finish Name -->
+            <div>
+                <label class="block text-sm font-medium mb-1">Finish Name *</label>
+                <input id="edit-finish-name" name="finish_name" type="text" required
+                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none">
+            </div>
+
+            <!-- Price -->
+            <div>
+                <label class="block text-sm font-medium mb-1">Price (₱) *</label>
+                <input id="edit-finish-price" name="price" type="number" min="0" step="any" required
+                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none">
+            </div>
+
+            <!-- Details -->
+            <div>
+                <label class="block text-sm font-medium mb-1">Details *</label>
+                <textarea id="edit-finish-details" name="details" rows="3" required
+                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none"></textarea>
+            </div>
+
+            <!-- Properties -->
+            <div>
+                <label class="block text-sm font-medium mb-1">Properties (comma-separated)</label>
+                <input id="edit-finish-properties" name="properties" type="text"
+                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none">
+            </div>
+
+            <!-- Availability -->
+            <div class="flex items-center gap-2">
+                <input type="checkbox" id="edit-finish-available" name="available"
+                    class="w-4 h-4 text-orange-500 rounded focus:ring-orange-400">
+                <label for="edit-finish-available" class="text-sm font-medium text-gray-700">Available for orders</label>
+            </div>
+
+            <!-- Current Image -->
+            <div>
+                <label class="block text-sm font-medium mb-1">Current Image</label>
+                <div class="flex items-center gap-4">
+                    <img id="edit-finish-current-image" src="" alt="Finish Image"
+                        class="w-32 h-32 object-cover rounded-md border hidden">
+                    <p id="edit-finish-no-image-text" class="text-sm text-gray-500 italic hidden">
+                        This finish currently has no image.
+                    </p>
+                    <div class="flex flex-col">
+                        <label class="flex items-center gap-2 text-sm text-gray-700">
+                            <input type="checkbox" id="edit-finish-remove-image" name="remove_image" class="w-4 h-4 text-red-500">
+                            Remove Image
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Replace Image -->
+            <div>
+                <label class="block text-sm font-medium mb-1">Change Image (optional)</label>
+                <input type="file" id="edit-finish-image" name="image" accept="image/*"
+                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none">
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex justify-end space-x-3 pt-2">
+                <button type="button" id="cancelEditBtn_finish"
+                    class="px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-100">
+                    Cancel
+                </button>
+                <button type="submit"
+                    class="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -31,6 +31,15 @@ class Material
     #[ORM\OneToMany(targetEntity: UserOrder::class, mappedBy: 'material')]
     private Collection $userOrders;
 
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $properties = null;
+
+    #[ORM\Column]
+    private ?bool $availability = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $image_path = null;
+
     public function __construct()
     {
         $this->userOrders = new ArrayCollection();
@@ -104,6 +113,41 @@ class Material
             }
         }
 
+        return $this;
+    }
+
+    public function getProperties(): ?string
+    {
+        return $this->properties;
+    }
+
+    public function setProperties(string $properties): static
+    {
+        $this->properties = $properties;
+
+        return $this;
+    }
+
+    public function isAvailability(): ?bool
+    {
+        return $this->availability;
+    }
+
+    public function setAvailability(bool $availability): static
+    {
+        $this->availability = $availability;
+
+        return $this;
+    }
+
+    public function getImagePath(): ?string
+    {
+        return $this->image_path;
+    }
+
+    public function setImagePath(?string $image_path): static
+    {
+        $this->image_path = $image_path;
         return $this;
     }
 }

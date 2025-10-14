@@ -1,13 +1,121 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Filument Foundry: Admin{% endblock %}
+
 {% block body %}
     <div class="flex-1 flex flex-col bg-[#f5ede5]">
         <main class="p-6 space-y-6">
             <!-- Header -->
-            <div class="space-y-2">
-                <h1 class="text-3xl font-extrabold text-gray-900 mb-0">Finishing Services</h1>
-                <p class="text-gray-600 text-base mt-0">Manage post-processing and finishing options</p>
+            <div class="flex justify-between items-center">
+                <!-- Left side: Title + Subtitle -->
+                <div class="space-y-1">
+                    <h1 class="text-3xl font-extrabold text-gray-900">Finishing Services</h1>
+                    <p class="text-gray-600 text-base">Manage post-processing and finishing options</p>
+                </div>
+
+                <!-- Right side: Button -->
+                <button id="button_modal_addFinishes"
+                        style="background-color: #1E1E18;"
+                        class="text-white px-4 py-2 rounded-lg flex items-center hover:bg-gray-800 transition gap-2">
+                    <img src="{{ asset('images/admin/Plus.svg') }}" alt="Add Icon" class="w-4 h-4">
+                    Add Finish
+                </button>
+
             </div>
+
+            <!-- Search -->
+            <div class="flex items-center justify-between gap-4 mt-4 w-full">
+                <input type="text" placeholder="Search finishes..."
+                    class="flex-1 py-2 px-2 text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-400 focus:outline-none text-gray-800 font-medium shadow-sm">
+
+                <button style="background-color: #1E1E18;"
+                    class="text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-800 transition">
+                    <img src="{{ asset('images/admin/search.svg') }}" alt="Search Icon" class="w-4 h-4">
+                    Search
+                </button>
+            </div>
+
+            <!-- FINISHES GRID -->
+            <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-4 gap-6 mt-6">
+                {# Loop #}
+                {% for finish in finishes %}
+                <div class="bg-white rounded-2xl shadow overflow-hidden flex flex-col">
+                    <div class="relative h-48 w-full">
+                        <!-- Badge -->
+                        {% if finish.availability %}
+                            <span class="absolute top-4 right-4 bg-[rgb(251,165,3)] text-black text-sm font-semibold px-2 py-1 rounded-md shadow-md">Available</span>
+                        {% else %}
+                            <span class="absolute top-4 right-4 bg-gray-400 text-white text-sm font-semibold px-2 py-1 rounded-md shadow-md">Unavailable</span>
+                        {% endif %}
+
+                        <!-- Image -->
+                        <img
+                            src="{{ asset(finish.imagePath|default('uploads/placeholder.jpeg')) }}"
+                            alt="{{ finish.name }}"
+                            class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                        />
+                    </div>
+                    <!-- Card Body -->
+                    <div class="p-4 flex flex-col flex-1">
+                        <div class="flex flex-col space-y-3">
+                            <div class="space-y-6">
+                                <div class="flex items-start justify-between">
+                                    <div>
+                                        <h3 class="text-lg font-semibold">{{ finish.name }}</h3>
+                                        <p class="text-gray-500 text-sm">{{ finish.details }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sky-600 font-bold text-lg mt-1">₱{{ finish.price|number_format(2, '.', ',') }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-wrap gap-2 mt-6">
+                                    {% for property in finish.properties|split(',') %}
+                                        <span class="text-black text-xs px-3 py-1 rounded-xl border border-gray-300">
+                                            {{ property|trim }}
+                                        </span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer Controls -->
+                        <div class="flex gap-2 pt-6 justify-end">
+                            <!-- EDIT BUTTON -->
+                            <button
+                                type="button"
+                                class="editFinishBtn border border-gray-400 px-2 py-2 rounded-xl font-medium flex items-center gap-2 text-black
+                                    bg-[#f5ede5] hover:bg-[rgb(251,165,3)] transition-colors"
+                                data-id="{{ finish.id }}"
+                                data-name="{{ finish.name }}"
+                                data-details="{{ finish.details }}"
+                                data-price="{{ finish.price }}"
+                                data-properties="{{ finish.properties }}"
+                                data-availability="{{ finish.availability ? '1' : '0' }}"
+                                data-image="{{ finish.imagePath ? asset(finish.imagePath) : '' }}"
+                            >
+                                <img src="{{ asset('images/admin/edit.svg') }}" alt="Edit Icon" class="w-4 h-4">
+                            </button>
+
+
+                            <!-- DELETE BUTTON -->
+                            <button
+                                type="button"
+                                class="deleteFinishBtn border border-gray-400 px-2 py-2 rounded-xl font-medium flex items-center gap-2 text-black
+                                    bg-[#f5ede5] hover:bg-[rgb(251,165,3)] transition-colors"
+                                data-delete-url="{{ path('admin_delete_finish', { id: finish.id }) }}"
+                                data-finish-name="{{ finish.name }}"
+                            >
+                                <img src="{{ asset('images/admin/trash 2.svg') }}" alt="Trash Icon" class="w-4 h-4">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                    <p class="text-gray-500">No finishes found.</p>
+                {% endfor %}
+            </div>
+
         </main>
     </div>
 </div> <!-- NABILIN NA CLOSE FOR LEFT SIDEBAR -->

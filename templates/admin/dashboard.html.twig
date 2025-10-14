@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AdminController!{% endblock %}
+{% block title %}Filument Foundry: Admin{% endblock %}
 
 {% block body %}
 
@@ -75,8 +75,57 @@
                     </ul>
                 </div>
             </div>
+
+            
+
+            <!-- Quick Actions Pad -->
+            <div class="bg-white rounded-lg p-6 shadow mt-6">
+                <h3 class="text-lg font-semibold mb-4">Quick Actions</h3>
+
+                <!-- Main Buttons -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full">
+
+                    <!-- Add New Material -->
+                    <a href="#" 
+                            id="button_modal_addMaterials"
+                            class="flex flex-col items-start gap-3 p-4 border rounded-lg hover:shadow-lg hover:bg-blue-50 transition-all cursor-pointer">
+                        <img src="{{ asset('images/admin/plus 1.svg') }}" alt="Add Icon" class="w-6 h-6">
+
+                        <div>
+                            <h4 class="font-semibold text-gray-900">Add New Material</h4>
+                            <p class="text-sm text-gray-500">Add a new printing material to the catalog</p>
+                        </div>
+                    </a>
+
+                    <!-- Add New Finish -->
+                    <a href="#" 
+                        id="button_modal_addFinishes"
+                        class="flex flex-col items-start gap-3 p-4 border rounded-lg hover:shadow-lg hover:bg-blue-50 transition-all cursor-pointer">
+                        <img src="{{ asset('images/admin/plus 1.svg') }}" alt="Add Icon" class="w-6 h-6">
+
+                        <div>
+                            <h4 class="font-semibold text-gray-900">Add New Finish</h4>
+                            <p class="text-sm text-gray-500">Add a new post-processing or finishing option</p>
+                        </div>
+                    </a>
+
+                    <!-- Add New Color -->
+                    <a href="#"
+                        id="button_modal_addColors"
+                        class="flex flex-col items-start gap-3 p-4 border rounded-lg hover:shadow-lg hover:bg-blue-50 transition-all cursor-pointer">
+                        <img src="{{ asset('images/admin/plus 1.svg') }}" alt="Add Icon" class="w-6 h-6">
+
+                        <div>
+                            <h4 class="font-semibold text-gray-900">Add New Color</h4>
+                            <p class="text-sm text-gray-500">Add a new filament color option</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
         </main>
     </div>
+
+    
 </div> <!-- NABILIN NA CLOSE FOR LEFT SIDEBAR -->
 
 {% endblock %}
