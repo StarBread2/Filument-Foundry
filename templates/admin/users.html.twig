@@ -3,145 +3,122 @@
 {% block title %}Filument Foundry: Admin{% endblock %}
 
 {% block body %}
-    <div class="flex-1 flex flex-col bg-[#f5ede5]">
-        <main class="p-6 space-y-6">
-            <!-- Header -->
-            <div class="flex justify-between items-center">
-                <!-- Left side: Title + Subtitle -->
-                <div class="space-y-1">
-                    <h1 class="text-3xl font-extrabold text-gray-900">Materials Management</h1>
-                    <p class="text-gray-600 text-base">Manage your 3D printing materials catalog</p>
-                </div>
-
-                <!-- Right side: Button -->
-                <button id="button_modal_addUser_users"
-                        style="background-color: #1E1E18;"
-                        class="text-white px-4 py-2 rounded-lg flex items-center hover:bg-gray-800 #3C3C30 transition gap-2">
-                    <img src="{{ asset('images/admin/Plus.svg') }}" alt="Add Icon" class="w-4 h-4">
-                    Add User
-                </button>
+<div class="flex-1 flex flex-col bg-[#f5ede5]">
+    <main class="p-6 space-y-6">
+        <!-- Header -->
+        <div class="flex justify-between items-center">
+            <div class="space-y-1">
+                <h1 class="text-3xl font-extrabold text-gray-900">Users Management</h1>
+                <p class="text-gray-600 text-base">Manage registered users and their access</p>
             </div>
 
-            <!-- Search-->
-            <div class="flex items-center justify-between gap-4 mt-4 w-full">
-                <input type="text" placeholder="Search user..."
-                    class="flex-1 py-2 px-2 text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-400 focus:outline-none text-gray-800 font-medium shadow-sm">
-                
-                <!-- Role Filter -->
-                <div class="relative inline-block">
-                    <select 
-                        class="border border-gray-300 text-sm rounded-lg py-2 pl-4 pr-10 
-                            focus:outline-none focus:ring-2 focus:ring-orange-400 
-                            appearance-none bg-white"
-                    >
-                        <option>All Roles</option>
-                        <option>Admin</option>
-                        <option>Customer</option>
-                    </select>
+            <!-- Add User Button -->
+            <button id="button_modal_addUser_users"
+                style="background-color: #1E1E18;"
+                class="text-white px-4 py-2 rounded-lg flex items-center hover:bg-gray-800 transition gap-2">
+                <img src="{{ asset('images/admin/Plus.svg') }}" alt="Add Icon" class="w-4 h-4">
+                Add User
+            </button>
+        </div>
 
-                    <!-- Custom dropdown arrow -->
-                    <svg xmlns="http://www.w3.org/2000/svg" 
-                        class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                            d="M19 9l-7 7-7-7" />
-                    </svg>
-                </div>
-                
-                <button style="background-color: #1E1E18;"
-                    class="text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-800 transition">
-                    <img src="{{ asset('images/admin/search.svg') }}" alt="Search Icon" class="w-4 h-4">
-                    Search
-                </button>
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+            <div class="bg-white p-4 rounded-lg shadow">
+                <p class="text-sm text-gray-500">Total Users</p>
+                <p class="text-2xl font-bold">{{ totalUsers }}</p>
             </div>
-
-            <!-- Summary Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="bg-white p-4 rounded-lg shadow">
-                    <p class="text-sm text-gray-500">Total Users</p>
-                    <p class="text-2xl font-bold">{{ totalUsers }}</p>
-                </div>
-                <div class="bg-white p-4 rounded-lg shadow">
-                    <p class="text-sm text-gray-500">Customers</p>
-                    <p class="text-2xl font-bold">{{ totalCustomers }}</p>
-                </div>
-                <div class="bg-white p-4 rounded-lg shadow">
-                    <p class="text-sm text-gray-500">Admins</p>
-                    <p class="text-2xl font-bold">{{ totalAdmins }}</p>
-                </div>
+            <div class="bg-white p-4 rounded-lg shadow">
+                <p class="text-sm text-gray-500">Customers</p>
+                <p class="text-2xl font-bold">{{ totalCustomers }}</p>
             </div>
-
-            <!-- https://chatgpt.com/c/68d265c4-7ea8-8332-9ef4-ca7b35bdb23a -->
-            <!-- Users Table -->
-            <div class="bg-white rounded-lg shadow overflow-hidden mt-6">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-100">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Full Name</th>
-                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Email</th>
-                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Address</th>
-                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Role</th>
-                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Registered</th>
-                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Orders</th>
-                            <th class="px-6 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-100">
-                        {% for user in users %}
-                        <tr class="hover:bg-gray-50 transition-colors">
-                            <td class="px-6 py-4 font-medium text-gray-900">{{ user.fullName }}</td>
-                            <td class="px-6 py-4 text-gray-700">{{ user.email }}</td>
-                            <td class="px-6 py-4 text-gray-700 truncate max-w-[200px]" title="{{ user.address }}">
-                                {{ user.address }}
-                            </td>
-                            <td class="px-6 py-4">
-                                {% if user.isAdmin %}
-                                    <span class="bg-[rgb(18,156,221)] text-white text-xs font-bold px-5 py-2 rounded-full">admin</span>
-                                {% else %}
-                                    <span class="bg-black text-white text-xs font-bold px-4 py-2 rounded-full">customer</span>
-                                {% endif %}
-                            </td>
-                            <td class="px-6 py-4 text-gray-600">{{ user.createdAt|date('m/d/Y') }}</td>
-                            <td class="px-6 py-4 text-gray-700 text-center">{{ user.userOrders|length }}</td>
-                            <td class="px-6 py-4 text-right flex justify-end gap-3">
-
-                                {# EDIT BUTTON #}
-                                <button
-                                    type="button"
-                                    class="editUserBtn border border-gray-400 px-2 py-2 rounded-xl font-medium flex items-center gap-2 text-black
-                                        bg-[#f5ede5] hover:bg-[rgb(251,165,3)] transition-colors"
-                                    data-id="{{ user.id }}"
-                                    data-username="{{ user.username }}"
-                                    data-email="{{ user.email }}"
-                                    data-fullname="{{ user.fullName }}"
-                                    data-address="{{ user.address }}"
-                                    data-role="{{ user.isAdmin ? 'admin' : 'customer' }}"
-                                >
-                                    <img src="{{ asset('images/admin/edit.svg') }}" alt="Edit Icon" class="w-4 h-4">
-                                </button>
-
-                                {# DELETE BUTTON #}
-                                <button
-                                    type="button"
-                                    class="deleteUserBtn border border-gray-400 px-2 py-2 rounded-xl font-medium flex items-center gap-2 text-black
-                                        bg-[#f5ede5] hover:bg-[rgb(251,165,3)] transition-colors"
-                                    data-delete-url="{{ path('admin_delete_user', { id: user.id }) }}"
-                                    data-username="{{ user.fullName }}"
-                                >
-                                    <img src="{{ asset('images/admin/trash 2.svg') }}" alt="Trash Icon" class="w-4 h-4">
-                                </button>
-                            </td>
-                        </tr>
-                        {% else %}
-                        <tr>
-                            <td colspan="7" class="px-6 py-4 text-center text-gray-500">No users found.</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <div class="bg-white p-4 rounded-lg shadow">
+                <p class="text-sm text-gray-500">Admins</p>
+                <p class="text-2xl font-bold">{{ totalAdmins }}</p>
             </div>
-            
-        </main>
-    </div>
-</div> <!-- NABILIN NA CLOSE FOR LEFT SIDEBAR -->
+        </div>
+
+        <!-- Users Table -->
+        <div class="bg-white rounded-lg shadow overflow-hidden mt-6">
+            <table id="usersTable" class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Full Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Email</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Address</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Role</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Registered</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Orders</th>
+                        <th class="px-6 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    {% for user in users %}
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-6 py-4 font-medium text-gray-900">{{ user.fullName }}</td>
+                        <td class="px-6 py-4 text-gray-700">{{ user.email }}</td>
+                        <td class="px-6 py-4 text-gray-700 truncate max-w-[200px]" title="{{ user.address }}">{{ user.address }}</td>
+                        <td class="px-6 py-4">
+                            {% if user.isAdmin %}
+                                <span class="bg-[rgb(18,156,221)] text-white text-xs font-bold px-5 py-2 rounded-full">admin</span>
+                            {% else %}
+                                <span class="bg-black text-white text-xs font-bold px-4 py-2 rounded-full">customer</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 text-gray-600">{{ user.createdAt|date('m/d/Y') }}</td>
+                        <td class="px-6 py-4 text-gray-700 text-center">{{ user.userOrders|length }}</td>
+                        <td class="px-6 py-4 text-right flex justify-end gap-3">
+                            <!-- EDIT BUTTON -->
+                            <button
+                                type="button"
+                                class="editUserBtn border border-gray-400 px-2 py-2 rounded-xl font-medium flex items-center gap-2 text-black
+                                bg-[#f5ede5] hover:bg-[rgb(251,165,3)] transition-colors"
+                                data-id="{{ user.id }}"
+                                data-username="{{ user.username }}"
+                                data-email="{{ user.email }}"
+                                data-fullname="{{ user.fullName }}"
+                                data-address="{{ user.address }}"
+                                data-role="{{ user.isAdmin ? 'admin' : 'customer' }}">
+                                <img src="{{ asset('images/admin/edit.svg') }}" alt="Edit Icon" class="w-4 h-4">
+                            </button>
+
+                            <!-- DELETE BUTTON -->
+                            <button
+                                type="button"
+                                class="deleteUserBtn border border-gray-400 px-2 py-2 rounded-xl font-medium flex items-center gap-2 text-black
+                                bg-[#f5ede5] hover:bg-[rgb(251,165,3)] transition-colors"
+                                data-delete-url="{{ path('admin_delete_user', { id: user.id }) }}"
+                                data-username="{{ user.fullName }}">
+                                <img src="{{ asset('images/admin/trash 2.svg') }}" alt="Trash Icon" class="w-4 h-4">
+                            </button>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="px-6 py-4 text-center text-gray-500">No users found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ✅ DataTable Initialization -->
+        <script>
+            $(document).ready(function () {
+                $('#usersTable').DataTable({
+                    pageLength: 10,
+                    order: [[0, 'asc']],
+                    language: {
+                        search: "Search user:",
+                        lengthMenu: "Show _MENU_ entries per page",
+                        info: "Showing _START_ to _END_ of _TOTAL_ users",
+                        paginate: { previous: "←", next: "→" },
+                        emptyTable: "No users found."
+                    }
+                });
+            });
+        </script>
+
+    </main>
+</div>
+</div> <!-- Close for left sidebar -->
 {% endblock %}
