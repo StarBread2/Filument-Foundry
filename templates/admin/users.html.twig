@@ -21,6 +21,26 @@
             </button>
         </div>
 
+        <!-- Search-->
+        <div class="flex items-center justify-between gap-4 mt-4 w-full">
+            <input type="text" placeholder="Search user..."
+                class="flex-1 py-2 px-2 text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-400 focus:outline-none text-gray-800 font-medium shadow-sm">
+            
+            <!-- Role Filter -->
+            <div class="relative inline-block">
+                <select 
+                    class="border border-gray-300 text-sm rounded-lg py-2 pl-4 pr-10 
+                        focus:outline-none focus:ring-2 focus:ring-orange-400 
+                        appearance-none bg-white"
+                >
+                    <option>All Roles</option>
+                    <option>Admin</option>
+                    <option>Customer</option>
+                </select>
+
+            </div>
+        </div>
+
         <!-- Summary Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-6">
             <div class="bg-white p-4 rounded-lg shadow">
@@ -58,7 +78,7 @@
                         <td class="px-6 py-4 text-gray-700">{{ user.email }}</td>
                         <td class="px-6 py-4 text-gray-700 truncate max-w-[200px]" title="{{ user.address }}">{{ user.address }}</td>
                         <td class="px-6 py-4">
-                            {% if user.isAdmin %}
+                            {% if 'ROLE_ADMIN' in user.roles %}
                                 <span class="bg-[rgb(18,156,221)] text-white text-xs font-bold px-5 py-2 rounded-full">admin</span>
                             {% else %}
                                 <span class="bg-black text-white text-xs font-bold px-4 py-2 rounded-full">customer</span>
@@ -73,7 +93,6 @@
                                 class="editUserBtn border border-gray-400 px-2 py-2 rounded-xl font-medium flex items-center gap-2 text-black
                                 bg-[#f5ede5] hover:bg-[rgb(251,165,3)] transition-colors"
                                 data-id="{{ user.id }}"
-                                data-username="{{ user.username }}"
                                 data-email="{{ user.email }}"
                                 data-fullname="{{ user.fullName }}"
                                 data-address="{{ user.address }}"
@@ -101,22 +120,9 @@
             </table>
         </div>
 
-        <!-- ✅ DataTable Initialization -->
-        <script>
-            $(document).ready(function () {
-                $('#usersTable').DataTable({
-                    pageLength: 10,
-                    order: [[0, 'asc']],
-                    language: {
-                        search: "Search user:",
-                        lengthMenu: "Show _MENU_ entries per page",
-                        info: "Showing _START_ to _END_ of _TOTAL_ users",
-                        paginate: { previous: "←", next: "→" },
-                        emptyTable: "No users found."
-                    }
-                });
-            });
-        </script>
+       
+        
+
 
     </main>
 </div>

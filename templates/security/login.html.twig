@@ -1,0 +1,104 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+<div class="min-h-screen flex">
+    {# left side #}
+    <div class="flex-shrink-0 flex justify-center" style="background-color: rgb(30,30,24); width: 600px;">
+        <div style="margin-top: 2.5rem; margin-left: 4rem; ">
+            <div class="flex items-center mb-5">
+                <a href="{{ path('home_index') }}">
+                    <img src="{{ asset('images/login/FilumentFoundryLong.svg') }}"
+                        alt="Filument Foundry Logo"
+                        class="h-5 w-auto transition-all duration-200"
+                        style="height: 3.2rem;">
+                </a>
+            </div>
+
+            <h1 class="text-2xl font-bold mb-5 mt-1 text-white" style="font-size: 2.5rem; width: 80%; margin-top: 2.5rem;">Welcome Back</h1>
+            <p class="text-white text-lg" style="width: 80%; margin-top: 2rem; opacity: 0.8;">
+                Sign in to access your projects and continue turning digital dreams into physical reality.
+            </p>
+        </div>
+    </div>
+
+    {# right side #}
+    <div class="flex-1 bg-[rgb(244,236,228)]" style="display: flex; align-items: center; justify-content: center;">
+        <div style="width: 80%;">
+            <h2 class="text-4xl font-bold mb-2">Sign In</h2>
+            <p class="text-gray-600 text-xl mb-8">Enter your credentials to access your account</p>
+
+            <form method="post">
+                {% if error %}
+                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+
+                {# email address #}
+                <div class="mb-5">
+                    <label class="block text-base font-medium mb-1" for="inputEmail">Email Address</label>
+                    <input 
+                        type="email" 
+                        value="{{ last_username }}" 
+                        name="email" 
+                        id="inputEmail" 
+                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black outline-none" 
+                        autocomplete="email" 
+                        placeholder="you@example.com"
+                        required autofocus
+                    >
+                </div>
+                
+                {# password #}
+                <div class="mb-5">
+                    <label class="block text-base font-medium mb-1" for="inputPassword">Password</label>
+                    <div class="relative">
+                        <input 
+                            id="inputPassword" 
+                            type="password" 
+                            name="password" 
+                            id="inputPassword" 
+                            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black outline-none" 
+                            autocomplete="current-password"
+                            placeholder="Enter your password"
+                            required
+                        >
+                        <span id="togglePassword" class="absolute right-4 top-3 text-gray-500 cursor-pointer">👁</span>
+                        <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+                    </div>
+                </div>
+                
+                {# remember me and forgot password#}
+                <div class="flex mb-3 items-center justify-between text-sm">
+                    <label>
+                        <input 
+                            type="checkbox" 
+                            name="_remember_me"
+                            class="rounded"
+                        > Remember me
+
+                        <a href="{{ path('home_index') }}" class="text-blue-600 hover:underline">Forgot password?</a>
+                    </label>
+                </div>
+
+                <button 
+                class="btn btn-lg btn-primary w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-900 transition" 
+                type="submit">
+                    Sign in
+                </button>
+
+                <p class="text-center text-sm mt-6">
+                    Don’t have an account?
+                    <a href="{{ path('app_register') }}" class="text-blue-600 hover:underline font-semibold">
+                        Sign up for free
+                    </a>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}

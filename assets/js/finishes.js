@@ -193,5 +193,25 @@ document.addEventListener("DOMContentLoaded", () =>
         }
     // ************************************EDIT FINISH MODAL************************************
 
+    // ************************************SEARCH BAR************************************
+        document.getElementById("searchInput_finishes").addEventListener("input", function () {
+            const searchValue_finishes = this.value.toLowerCase();
+            const cards_finishes = document.querySelectorAll(".finish-card_finishes");
 
+            cards_finishes.forEach(card => {
+                const name_finishes = card.dataset.name_finishes;
+                const details_finishes = card.dataset.details_finishes;
+                const properties_finishes = card.dataset.properties_finishes;
+                const price_finishes = card.dataset.price_finishes;
+
+                const matches_finishes =
+                    name_finishes.includes(searchValue_finishes) ||
+                    details_finishes.includes(searchValue_finishes) ||
+                    properties_finishes.includes(searchValue_finishes) ||
+                    price_finishes.includes(searchValue_finishes);
+
+                card.style.display = matches_finishes ? "flex" : "none";
+            });
+        });
+    // ************************************SEARCH BAR************************************
 });

@@ -25,7 +25,7 @@
 
             <!-- Search -->
             <div class="flex items-center justify-between gap-4 mt-4 w-full">
-                <input type="text" placeholder="Search finishes..."
+                <input id="searchInput_finishes" type="text" placeholder="Search finishes..."
                     class="flex-1 py-2 px-2 text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-400 focus:outline-none text-gray-800 font-medium shadow-sm">
 
                 <button style="background-color: #1E1E18;"
@@ -39,7 +39,12 @@
             <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-4 gap-6 mt-6">
                 {# Loop #}
                 {% for finish in finishes %}
-                <div class="bg-white rounded-2xl shadow overflow-hidden flex flex-col">
+                <div class="bg-white rounded-2xl shadow overflow-hidden flex flex-col finish-card_finishes"
+                        data-name_finishes="{{ finish.name|lower }}"
+                        data-details_finishes="{{ finish.details|lower }}"
+                        data-properties_finishes="{{ finish.properties|lower }}"
+                        data-price_finishes="{{ finish.price }}"
+                >
                     <div class="relative h-48 w-full">
                         <!-- Badge -->
                         {% if finish.availability %}

@@ -72,9 +72,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (editModal && formEdit) {
             document.querySelectorAll(".editUserBtn").forEach(button => {
                 button.addEventListener("click", () => {
-                    const { id, username, email, fullname, address, role } = button.dataset;
+                    const { id, email, fullname, address, role } = button.dataset;
 
-                    document.getElementById("edit-username").value = username;
                     document.getElementById("edit-email").value = email;
                     document.getElementById("edit-fullName").value = fullname;
                     document.getElementById("edit-address").value = address;
@@ -114,4 +113,36 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
     // ************************************EDIT MODAL************************************
+
+    // ************************************SAERCH BAR************************************
+    //  <!-- DataTable Initialization -->
+    // Initialize DataTable
+        var table = $('#usersTable').DataTable({
+            pageLength: 10,
+            order: [[0, 'asc']],
+            language: {
+                lengthMenu: "Show _MENU_ entries per page",
+                info: "Showing _START_ to _END_ of _TOTAL_ users",
+                paginate: { previous: "←", next: "→" },
+                emptyTable: "No users found."
+            },
+            dom: 'lrtip', // Remove default search input
+            stripeClasses: [], // Remove default stripe classes
+        });
+
+        // Custom search input
+        $('input[placeholder="Search user..."]').on('keyup', function () {
+            table.search(this.value).draw();
+        });
+
+        // Role filter
+        $('select').on('change', function () {
+            var role = $(this).val();
+            if (role === "All Roles") {
+                table.columns(3).search('').draw(); // Clear role filter
+            } else {
+                table.columns(3).search(role.toLowerCase()).draw(); // Search by role column
+            }
+        });
+    // ************************************SAERCH BAR************************************
 });

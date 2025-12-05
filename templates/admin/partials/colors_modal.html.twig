@@ -56,7 +56,10 @@
 
                 <!-- IMAGE UPLOAD -->
                 <div id="imageUploadContainer" class="hidden">
-                    <div id="dropzoneColor" class="w-full border-2 border-dashed border-gray-300 rounded-md px-3 py-10 text-center cursor-pointer bg-white hover:bg-gray-50 transition">
+                    <div id="dropzoneColor" 
+                        class="w-full border-2 border-dashed border-gray-300 rounded-md px-3 py-10 text-center cursor-pointer bg-white hover:bg-gray-50 transition"
+                        style="max-height: 100px; overflow-y: auto;"
+                    >
                         <p class="text-gray-500">Drag & drop an image here or click to browse</p>
                         <input type="file" name="image" id="colorImageInput" accept="image/*" class="hidden">
                         <img id="colorPreviewImage" class="mt-3 mx-auto max-h-40 hidden rounded-md" />
@@ -164,7 +167,10 @@
                 <!-- IMAGE UPLOAD -->
                 <div id="editImageUploadContainer" class="space-y-2 hidden">
                     <label class="block text-gray-700 font-medium mb-1">Upload Image</label>
-                    <div id="editDropzoneColor" class="border-2 border-dashed border-gray-400 rounded-lg p-6 text-center cursor-pointer hover:bg-orange-50 transition">
+                    <div id="editDropzoneColor" 
+                        class="border-2 border-dashed border-gray-400 rounded-lg p-6 text-center cursor-pointer hover:bg-orange-50 transition"
+                        style="max-height: 100px; overflow-y: auto;"
+                    >
                         <p class="text-gray-600">Click or drag an image here to upload</p>
                         <input type="file" id="editColorImageInput" name="image" accept="image/*" class="hidden">
                         <img id="editColorPreviewImage" class="mt-4 w-full h-40 object-cover rounded-lg hidden" alt="Preview">

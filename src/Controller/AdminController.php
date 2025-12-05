@@ -45,8 +45,6 @@ final class AdminController extends AbstractController
         return $this->render('admin/orders.html.twig');
     }
 
-
-
     #****************************************USERS****************************************#
     #https://chatgpt.com/c/68d265c4-7ea8-8332-9ef4-ca7b35bdb23a
         # CREATE
@@ -54,13 +52,18 @@ final class AdminController extends AbstractController
         public function addUser(Request $request, EntityManagerInterface $em, ValidatorInterface $validator): Response
         {
             $user = new User();
-            $user->setUsername($request->request->get('username'));
             $user->setPassword(password_hash($request->request->get('password'), PASSWORD_BCRYPT));
             $user->setFullName($request->request->get('fullName'));
             $user->setEmail($request->request->get('email'));
             $user->setAddress($request->request->get('address'));
             $user->setCreatedAt(new \DateTime());
-            $user->setIsAdmin($request->request->get('role') === 'admin');
+
+            // twig returns 'admin' or 'user' then manually setroles depending on that
+            if ($request->request->get('role') === 'admin') {
+                $user->setRoles(['ROLE_ADMIN']);
+            } else {
+                $user->setRoles(['ROLE_USER']);
+            }
 
             //Validate
             $errors = $validator->validate($user);
@@ -97,15 +100,16 @@ final class AdminController extends AbstractController
 
             foreach ($users as $user) 
             {
-                if ($user->isAdmin()) 
+                if (in_array('ROLE_ADMIN', $user->getRoles())) 
                 {
-                    $totalAdmins++;
+                    $totalAdmins++; // count admin users
                 } 
                 else 
                 {
-                    $totalCustomers++;
+                    $totalCustomers++; // count non-admin users
                 }
             }
+
 
             return $this->render('admin/users.html.twig', [
                 'users' => $users,
@@ -119,11 +123,16 @@ final class AdminController extends AbstractController
         #[Route('/admin/edit-user/{id}', name: 'admin_edit_user', methods: ['POST'])]
         public function editUser(Request $request, User $user, EntityManagerInterface $em): Response
         {
-            $user->setUsername($request->request->get('username'));
             $user->setEmail($request->request->get('email'));
             $user->setFullName($request->request->get('fullName'));
             $user->setAddress($request->request->get('address'));
-            $user->setIsAdmin($request->request->get('role') === 'admin');
+            
+            // twig returns 'admin' or 'user' then manually setroles depending on that
+            if ($request->request->get('role') === 'admin') {
+                $user->setRoles(['ROLE_ADMIN']);
+            } else {
+                $user->setRoles(['ROLE_USER']);
+            }
 
             $newPassword = $request->request->get('password');
             if (!empty($newPassword)) 

@@ -1,0 +1,137 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    <div class="min-h-screen flex">
+        <div class="flex-shrink-0 flex justify-center" style="background-color: rgb(30,30,24); width: 600px;">
+            <div style="margin-top: 2.5rem; margin-left: 4rem;">
+                <div class="flex items-center mb-5">
+                    <a href="{{ path('home_index') }}">
+                        <img src="{{ asset('images/login/FilumentFoundryLong.svg') }}"
+                            alt="Filument Foundry Logo"
+                            class="h-5 w-auto transition-all duration-200"
+                            style="height: 3.2rem;">
+                    </a>
+                </div>
+
+                <h1 class="text-2xl font-bold mb-5 mt-1 text-white" style="font-size: 2.5rem; width: 80%; margin-top: 2.5rem;">Join Our Community</h1>
+                <p class="text-white text-lg" style="width: 80%; margin-top: 2rem; opacity: 0.8;">
+                    Create an account and start bringing your digital dreams to life with our 3D printing services.
+                </p>
+
+                <ul class="space-y-4 text-sm text-white" style="margin-top: 2.5rem;">
+                    <li class="flex items-center gap-3">
+                        <img src="{{ asset('images/register/Check.svg') }}"
+                            alt="Filument Foundry Logo"
+                            class="h-5 w-auto transition-all duration-200"
+                        >
+                        <span style="opacity: 0.8;">Access to premium 3D printing materials</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <img src="{{ asset('images/register/Check.svg') }}"
+                            alt="Filument Foundry Logo"
+                            class="h-5 w-auto transition-all duration-200"
+                        >
+                        <span style="opacity: 0.8;">Priority support from our expert team</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <img src="{{ asset('images/register/Check.svg') }}"
+                            alt="Filument Foundry Logo"
+                            class="h-5 w-auto transition-all duration-200"
+                        >
+                        <span style="opacity: 0.8;">Track your orders in real-time</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <img src="{{ asset('images/register/Check.svg') }}"
+                            alt="Filument Foundry Logo"
+                            class="h-5 w-auto transition-all duration-200"
+                        >
+                        <span style="opacity: 0.8;">Save your favorite designs</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="flex-1 flex-col bg-[rgb(244,236,228)]" style="display: flex; align-items: center; justify-content: center;">
+            <div style="width: 80%;">
+                <div>
+                    <h2 class="text-4xl font-bold mb-2">Create Account</h2>
+                    <p class="text-gray-600 text-xl mb-8">Sign up to start your 3D printing journey</p>
+                </div>
+
+                
+
+                {{ form_start(registrationForm, {'attr': {'class': ''}}) }}
+
+                    {{ form_errors(registrationForm) }}
+
+                    {# EMAIL #}
+                    <div class="mb-3">
+                        {{ form_label(registrationForm.email, 'Email Address', {'label_attr': {'class': 'block text-sm font-medium mb-1'}}) }}
+                        {{ form_widget(registrationForm.email, {'attr': {
+                            'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black outline-none', 
+                            'placeholder': 'Enter your username'}}) 
+                        }}
+                        {{ form_errors(registrationForm.email) }}
+                        {# {{ form_row(registrationForm.email) }} #}
+                    </div>
+                    
+
+                    {# PASSWORD #}
+                    <div class="mb-3">
+                        {{ form_label(registrationForm.plainPassword, 'Password', {'label_attr': {'class': 'block text-sm font-medium mb-1'}}) }}
+                        {{ form_widget(registrationForm.plainPassword, {'attr': {
+                            'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black outline-none', 
+                            'placeholder': 'Create a password (minimum: 6 characters)'}}) 
+                        }}
+                        {{ form_errors(registrationForm.plainPassword) }}
+                    </div>
+                    {# {{ form_row(registrationForm.plainPassword, {
+                        label: 'Password'
+                    }) }} #}
+
+                    {# FULL NAME #}
+                    <div class="mb-3">
+                        {{ form_label(registrationForm.fullName, 'Full Name', {'label_attr': {'class': 'block text-sm font-medium mb-1'}}) }}
+                        {{ form_widget(registrationForm.fullName, {'attr': {
+                            'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black outline-none', 
+                            'placeholder': 'Enter your full name'}}) 
+                        }}
+                        {{ form_errors(registrationForm.fullName) }}
+                    </div>
+
+                    {# ADDRESS #}
+                    <div class="mb-3">
+                        {{ form_label(registrationForm.address, 'Address', {'label_attr': {'class': 'block text-sm font-medium mb-1'}}) }}
+                        {{ form_widget(registrationForm.address, {'attr': {
+                            'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black outline-none', 
+                            'placeholder': 'Enter your full address'}}) 
+                        }}
+                        {{ form_errors(registrationForm.address) }}
+                    </div>
+
+                    {# TERMS #}
+                    <div class="flex items-start gap-2 text-sm mb-3">
+                        {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'mt-1'}}) }}
+                        <p>
+                            I agree to the 
+                            <a href="{{ path('home_index') }}" class="text-blue-600 hover:underline">Terms of Service</a>
+                            and
+                            <a href="{{ path('home_index') }}" class="text-blue-600 hover:underline">Privacy Policy</a>
+                        </p>
+                        {{ form_errors(registrationForm.agreeTerms) }}
+                    </div>
+                    {# {{ form_row(registrationForm.agreeTerms) }} #}
+
+                    <button type="submit" class="w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-900 transition">
+                        Create Account
+                    </button>
+                {{ form_end(registrationForm) }}
+            </div>
+            
+        </div>
+        
+    </div>
+
+{% endblock %}

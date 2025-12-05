@@ -3,9 +3,10 @@ module.exports = {
   content: [
     './assets/**/*.js',
     './assets/**/*.css',
-    './templates/**/*.html.twig',
+    './templates/**/*.twig',
   ],
   safelist: [
+    'w-[150px]',
     'grid-cols-1',
     'grid-cols-2',
     'grid-cols-3',

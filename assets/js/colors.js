@@ -6,15 +6,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const addModal = document.getElementById("modal_addColors");
     const closeAdd1 = document.getElementById("closeColorsModalBtn");
     const closeAdd2 = document.getElementById("closeColorModalBtn2");
+    const modalOpened = false;
 
     if (addBtn && addModal) {
         addBtn.addEventListener("click", () => {
             addModal.classList.remove("hidden");
             console.log("opened add color modal");
+            modalOpened=true;
         });
 
-        closeAdd1?.addEventListener("click", () => addModal.classList.add("hidden"));
-        closeAdd2?.addEventListener("click", () => addModal.classList.add("hidden"));
+        closeAdd1?.addEventListener("click", () => { 
+            addModal.classList.add("hidden");
+            modalOpened=false;});
+        closeAdd2?.addEventListener("click", () => {
+            addModal.classList.add("hidden");
+            modalOpened=false;
+        });
 
         addModal.addEventListener("click", (e) => {
             if (e.target === addModal) addModal.classList.add("hidden");
@@ -104,26 +111,31 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // FORM VALIDATION (CREATE)
-    if (form) {
-        form.addEventListener("submit", (e) => {
-            const colorHexInput = document.getElementById("colorHex");
-            const colorImageInput = document.getElementById("colorImageInput");
+    if (modalOpened)
+    {
+        console.log(modalOpened);
+        if (form) {
+            form.addEventListener("submit", (e) => {
+                const colorHexInput = document.getElementById("colorHex");
+                const colorImageInput = document.getElementById("colorImageInput");
 
-            if (!appearanceTypeInput.value) {
-                e.preventDefault();
-                alert("⚠️ Please select a color appearance (Hex Color or Image).");
-                return;
-            }
+                if (!appearanceTypeInput.value) {
+                    e.preventDefault();
+                    alert("⚠️ Please select a color appearance (Hex Color or Image).");
+                    return;
+                }
 
-            if (appearanceTypeInput.value === "hex" && !colorHexInput?.value) {
-                e.preventDefault();
-                alert("⚠️ Please pick a hex color.");
-                return;
-            }
+                if (appearanceTypeInput.value === "hex" && !colorHexInput?.value) {
+                    e.preventDefault();
+                    alert("⚠️ Please pick a hex color.");
+                    return;
+                }
 
-            console.log("✅ Form validation passed — submitting...");
-        });
+                console.log("✅ Form validation passed — submitting...");
+            });
+        }
     }
+    
     // ************************************ CREATE MODAL ************************************
 
 
@@ -278,4 +290,26 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
     // ************************************ EDIT COLOR MODAL ************************************
+    
+    // ************************************ SEARCH BAR ************************************
+        document.getElementById("searchInput_colors").addEventListener("input", function () {
+            const searchValue_colors = this.value.toLowerCase();
+            const cards_colors = document.querySelectorAll(".color-card_colors");
+
+            cards_colors.forEach(card => {
+                const name_colors = card.dataset.name_colors;
+                const availability_colors = card.dataset.availability_colors;
+                const price_colors = card.dataset.price_colors;
+                const hex_colors = card.dataset.hex_colors;
+
+                const matches_colors =
+                    name_colors.includes(searchValue_colors) ||
+                    availability_colors.includes(searchValue_colors) ||
+                    price_colors.includes(searchValue_colors) ||
+                    hex_colors.includes(searchValue_colors);
+
+                card.style.display = matches_colors ? "flex" : "none";
+            });
+        });
+// ************************************ SEARCH BAR ************************************
 });

@@ -27,29 +27,59 @@
 
             <!-- Desktop Buttons -->
             <div class="hidden md:flex items-center gap-3">
-                <button class="flex items-center gap-2 rounded-md px-3 py-1 text-sm 
+                <button class="flex items-center gap-2 rounded-md px-3 py-2 text-sm 
                     border bg-[rgb(244,236,228)] hover:bg-[rgb(251,165,3)] transition-colors">
                     <img src="{{ asset('images/navbar/Upload.svg') }}" alt="Upload Icon" class="w-4 h-4">
                     Upload
                 </button>
 
-                <button class="flex items-center gap-2 rounded-md px-3 py-1 text-sm 
+                <button class="flex items-center gap-2 rounded-md px-3 py-2 text-sm 
                     bg-transparent hover:bg-[rgb(251,165,3)] transition-colors focus:outline-none">
                     <img src="{{ asset('images/navbar/My Cart.svg') }}" alt="My Cart Icon" class="w-4 h-4">
                     My Cart
                 </button>
 
+                {# IF THERE IS LOGIN USER THEN SIGN OUT, ELSE ESIGN IN #}
+                    {% if app.user %}
+                        <form method="post" action="{{ path('app_logout') }}">
+                            <button class="flex items-center gap-2 rounded-md px-3 py-2 text-sm 
+                                bg-transparent hover:bg-[rgb(251,165,3)] transition-colors focus:outline-none">
+                                <img src="{{ asset('images/navbar/LogOut.svg') }}" alt="Sign In Icon" class="w-4 h-4">
+                                Sign Out
+                            </button>      
+                        </form>
+                    
+                        {# User Avatar and First Name #}
+                        <div class="flex items-center gap-2 px-3 py-1 text-sm bg-gray-100 rounded-md">
+                            {# Circle Avatar with First Letter #}
+                            <div class="flex items-center justify-center w-6 h-6 bg-black text-white rounded-full font-semibold">
+                                {{ app.user.fullName|slice(0,1)|upper }}
+                            </div>
+                            {# Display First Name only (before first space) add (admin) if admin #}
+                            <span>
+                                {{ app.user.fullName|split(' ')[0]|capitalize }}
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    (admin)
+                                {% endif %}
+                            </span>
+                        </div>
+                    {% else %}
+                        <a href="{{ path('app_login') }}">
+                            <button class="flex items-center gap-2 rounded-md px-3 py-2 text-sm 
+                                bg-transparent hover:bg-[rgb(251,165,3)] transition-colors focus:outline-none">
+                                <img src="{{ asset('images/navbar/Log In.svg') }}" alt="Sign In Icon" class="w-4 h-4">
+                                Sign In
+                            </button>       
+                        </a>
+                    {% endif %}
+
                 
-                <button class="flex items-center gap-2 rounded-md px-3 py-1 text-sm 
-                    bg-transparent hover:bg-[rgb(251,165,3)] transition-colors focus:outline-none">
-                    <img src="{{ asset('images/navbar/Log In.svg') }}" alt="Sign In Icon" class="w-4 h-4">
-                    Sign In
-                </button>       
 
                 <button class="text-black font-semibold px-4 py-2 rounded-md 
                     bg-[rgb(251,165,3)] hover:bg-[rgb(252,175,36)] transition-colors">
                     Get Instant Quote
                 </button>
+
             </div>
         </div>
 

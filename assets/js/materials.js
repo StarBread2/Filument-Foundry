@@ -199,4 +199,26 @@ document.addEventListener("DOMContentLoaded", () =>
             });
         }
     // ************************************EDIT MODAL************************************
+
+    // ************************************SEARCH BAR************************************
+        document.getElementById("searchInput_materials").addEventListener("input", function () {
+            const searchValue_materials = this.value.toLowerCase();
+            const cards_materials = document.querySelectorAll(".material-card_materials");
+
+            cards_materials.forEach(card => {
+                const name_materials = card.dataset.name_materials;
+                const details_materials = card.dataset.details_materials;
+                const properties_materials = card.dataset.properties_materials;
+                const price_materials = card.dataset.price_materials.toString(); // ensure searchable
+
+                const matches_materials =
+                    name_materials.includes(searchValue_materials) ||
+                    details_materials.includes(searchValue_materials) ||
+                    properties_materials.includes(searchValue_materials) ||
+                    price_materials.includes(searchValue_materials);
+
+                card.style.display = matches_materials ? "flex" : "none";
+            });
+        });
+    // ************************************SEARCH BAR************************************
 });

@@ -6,19 +6,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css">
-        
-        <!-- ✅ jQuery (Required for DataTables) -->
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
-        <!-- ✅ DataTables CDN -->
-        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css">
-        <script src="https://cdn.datatables.net/2.0.7/js/dataTables.min.js"></script>
-
         {% block stylesheets %}
+            <!-- DataTables CSS -->
+            <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
         {% endblock %}
 
         {% block javascripts %}
+            <!-- jQuery (required for DataTables) -->
+            <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+            <!-- DataTables JS -->
+            <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
@@ -32,7 +30,9 @@
             'admin_users': ['admin/partials/users_modal.html.twig'],
             'admin_materials': ['admin/partials/materials_modal.html.twig'],
             'admin_finishes': ['admin/partials/finishes_modal.html.twig'],
-            'admin_colors': ['admin/partials/colors_modal.html.twig']
+            'admin_colors': ['admin/partials/colors_modal.html.twig'],
+            'app_login': [],
+            'app_register': []
         } %}
 
         {% if modals[currentRoute] is defined %}
@@ -44,30 +44,54 @@
         <!-- Nav Bar -->
         <!-- Nav Bar for admin and default web -->
         <!-- Nav Bar admin NAAY WALA NA CLOSE NA DIV!!!!, (CLOSE EVERY MAIN CONTENT)-->
-        {% set admin_routes = [
-            'admin_dashboard', 'admin_orders', 'admin_products', 'admin_users',
-            'admin_materials', 'admin_finishes', 'admin_colors', 'admin_settings'
-        ] %}
+            {% set admin_routes = [
+                'admin_dashboard', 'admin_orders', 'admin_products', 'admin_users',
+                'admin_materials', 'admin_finishes', 'admin_colors', 'admin_settings'
+            ] %}
 
-        {% if app.request.attributes.get('_route') in admin_routes %}
-            {% include 'partials/navbarAdmin.html.twig' %}
-        {% else %}
-            {% include 'partials/navbar.html.twig' %}
-        {% endif %}
+            {# STANDALONE PAGES (NO NAVBAR) #}
+            {% set standAlone_routes = [
+                'app_login', 'app_register'
+            ] %}
 
-        {% block body %}{% endblock %}
+            {% if app.request.attributes.get('_route') in admin_routes %}
+                {% include 'partials/navbarAdmin.html.twig' %}
+            {% else %}
+                {# IF STANDALONE THEN NONE (FUCK U PLDT) #}
+                {% if app.request.attributes.get('_route') in standAlone_routes %}
+                    {# RENDER NONE NONE #}
+                {% else %}
+                    {% include 'partials/navbar.html.twig' %}
+                {% endif %}
+            {% endif %}
+
+        {# RENDER THE MAIN #}
+            {% block body %}
+            {% endblock %}
 
         <!-- Admin Button -->
         <!-- Changes the button if home = "go to admin" else "go back to web" -->
-        {% if app.request.attributes.get('_route') not in admin_routes %}
-            <a href="{{ path('admin_dashboard') }}" 
-            class="fixed bottom-12 right-4 
-                    text-black font-semibold px-4 py-2 rounded-md 
-                    bg-[rgb(251,165,3)] hover:bg-[rgb(252,175,36)] 
-                    transition-colors shadow-lg">
-                    Admin Panel
-            </a>
-        {% endif %}
+            {% if app.user is not null and is_granted('ROLE_ADMIN') %}
+                {% if app.request.attributes.get('_route') not in admin_routes %}
+                    <a href="{{ path('admin_dashboard') }}" 
+                    class="fixed bottom-12 right-4 
+                            text-black font-semibold px-4 py-2 rounded-md 
+                            bg-[rgb(251,165,3)] hover:bg-[rgb(252,175,36)] 
+                            transition-colors shadow-lg">
+                            Admin Panel
+                    </a>
+                {% endif %}
+            {% endif %}
+
+        {# RENDER ALL ERROS (BROWSER DEFAULT) #}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <script>
+                    alert("{{ label|capitalize }}: {{ message|e('js') }}");
+                </script>
+            {% endfor %}
+        {% endfor %}
+
 
     </body>
 </html>
