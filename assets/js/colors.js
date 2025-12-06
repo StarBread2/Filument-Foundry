@@ -183,7 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const colorAvailable = btn.dataset.colorAvailable;  
 
                 // Fill the form
-                editForm.action = `/admin/edit-color/${colorId}`;
+                editForm.action = `/management/edit-color/${colorId}`;
                 document.getElementById("editColorName").value = colorName;
                 document.getElementById("editColorPrice").value = colorPrice;
                 document.getElementById("editColorAvailable").checked = colorAvailable === "1";
@@ -292,24 +292,38 @@ document.addEventListener("DOMContentLoaded", () => {
     // ************************************ EDIT COLOR MODAL ************************************
     
     // ************************************ SEARCH BAR ************************************
-        document.getElementById("searchInput_colors").addEventListener("input", function () {
-            const searchValue_colors = this.value.toLowerCase();
+        const availabilityFilter_colors = document.querySelector("#availabilityFilter_colors");
+        const searchInput_colors = document.querySelector("#searchInput_colors");
+
+        function filterColors() {
+            const searchValue_colors = searchInput_colors.value.toLowerCase();
+            const selectedAvailability_colors = availabilityFilter_colors.value.toLowerCase();
             const cards_colors = document.querySelectorAll(".color-card_colors");
 
             cards_colors.forEach(card => {
                 const name_colors = card.dataset.name_colors;
-                const availability_colors = card.dataset.availability_colors;
+                const availability_colors = card.dataset.availability_colors; // "available" or "unavailable"
                 const price_colors = card.dataset.price_colors;
                 const hex_colors = card.dataset.hex_colors;
 
-                const matches_colors =
+                // Search match
+                const matchesSearch_colors =
                     name_colors.includes(searchValue_colors) ||
                     availability_colors.includes(searchValue_colors) ||
                     price_colors.includes(searchValue_colors) ||
                     hex_colors.includes(searchValue_colors);
 
-                card.style.display = matches_colors ? "flex" : "none";
+                // Availability match
+                const matchesAvailability_colors =
+                    selectedAvailability_colors === "all" || availability_colors === selectedAvailability_colors;
+
+                // Final visibility
+                card.style.display = (matchesSearch_colors && matchesAvailability_colors) ? "flex" : "none";
             });
-        });
+        }
+
+        // Event listeners
+        searchInput_colors.addEventListener("input", filterColors);
+        availabilityFilter_colors.addEventListener("change", filterColors);
 // ************************************ SEARCH BAR ************************************
 });

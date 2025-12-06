@@ -10,7 +10,7 @@
 
 /* Hover effect */
 #usersTable tbody tr:hover {
-    background-color: #fdf1d6; /* Slight hover highlight */
+    background-color: #F9F5F1; /* Slight hover highlight */
 }
 
 /* Table header background */
@@ -18,14 +18,15 @@
     background-color: #ffffff;
 }
 
-#usersTable thead tr:hover {
-    background-color: #fdf1d6; /* Slight hover highlight */
+#usersTable thead th:hover {
+    background-color: #F9F5F1; /* Slight hover highlight */
 }
 
 /* DataTables wrapper background */
 .dataTables_wrapper {
     background-color: #ffffff; /* Match page background */
     padding: 0.5rem 1rem; /* optional padding */
+    border-radius: 1rem;
 }
 
 /* Length dropdown and info text */

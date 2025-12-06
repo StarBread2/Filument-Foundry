@@ -174,7 +174,7 @@ document.addEventListener("DOMContentLoaded", () =>
                     });
 
                     // Set form action
-                    editFinishForm.action = `/admin/edit-finish/${id}`;
+                    editFinishForm.action = `/management/edit-finish/${id}`;
 
                     // Show modal
                     editFinishModal.classList.remove("hidden");
@@ -194,8 +194,12 @@ document.addEventListener("DOMContentLoaded", () =>
     // ************************************EDIT FINISH MODAL************************************
 
     // ************************************SEARCH BAR************************************
-        document.getElementById("searchInput_finishes").addEventListener("input", function () {
-            const searchValue_finishes = this.value.toLowerCase();
+        const searchInput_finishes = document.getElementById("searchInput_finishes");
+        const availabilityFilter_finishes = document.getElementById("availabilityFilter_finishes");
+
+        function filterFinishes() {
+            const searchValue_finishes = searchInput_finishes.value.toLowerCase();
+            const selectedAvailability_finishes = availabilityFilter_finishes.value; // "all", "1", "0"
             const cards_finishes = document.querySelectorAll(".finish-card_finishes");
 
             cards_finishes.forEach(card => {
@@ -203,15 +207,30 @@ document.addEventListener("DOMContentLoaded", () =>
                 const details_finishes = card.dataset.details_finishes;
                 const properties_finishes = card.dataset.properties_finishes;
                 const price_finishes = card.dataset.price_finishes;
+                const availability_finishes = card.dataset.availability_finishes; // "1" or "0"
 
-                const matches_finishes =
+                // SEARCH MATCH
+                const matchesSearch_finishes =
                     name_finishes.includes(searchValue_finishes) ||
                     details_finishes.includes(searchValue_finishes) ||
                     properties_finishes.includes(searchValue_finishes) ||
                     price_finishes.includes(searchValue_finishes);
 
-                card.style.display = matches_finishes ? "flex" : "none";
+                // AVAILABILITY MATCH
+                const matchesAvailability_finishes =
+                    selectedAvailability_finishes === "all" ||
+                    availability_finishes === selectedAvailability_finishes;
+
+                // FINAL DISPLAY
+                card.style.display =
+                    matchesSearch_finishes && matchesAvailability_finishes
+                        ? "flex"
+                        : "none";
             });
-        });
+        }
+
+        // EVENTS
+        searchInput_finishes.addEventListener("input", filterFinishes);
+        availabilityFilter_finishes.addEventListener("change", filterFinishes);
     // ************************************SEARCH BAR************************************
 });

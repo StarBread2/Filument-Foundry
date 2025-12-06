@@ -7,6 +7,16 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\User;
 
+enum OrderState: string
+{
+    case PENDING = 'pending';
+    case PROCESSING = 'processing';
+    case PRINTING = 'printing';
+    case SHIPPED = 'shipped';
+    case DELIVERED = 'delivered';
+    case CANCELLED = 'cancelled';
+}
+
 #[ORM\Entity(repositoryClass: UserOrderRepository::class)]
 class UserOrder
 {
@@ -14,9 +24,6 @@ class UserOrder
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $filename = null;
 
     #[ORM\ManyToOne(inversedBy: 'userOrders')]
     #[ORM\JoinColumn(nullable: false)]
@@ -34,45 +41,36 @@ class UserOrder
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+    #[ORM\Column(type: 'integer')]
+    private int $quantity = 1;
+
     #[ORM\Column(length: 255)]
     private ?string $file_path = null;
 
-    public const STATE_PROCESSING = 'processing';
-    public const STATE_PRINTING = 'printing';
-    public const STATE_SHIPPED = 'shipped';
-    public const STATE_DELIVERED = 'delivered';
-    public const STATE_CANCELLED = 'cancelled';
+    #[ORM\Column(enumType: OrderState::class)]
+    private OrderState $order_state = OrderState::PENDING;
 
-    #[ORM\Column(length: 255)]
-    private ?string $order_state = null;
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTime $delivery_date = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTime $delievery_date = null;
-
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $delivery_arrival = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
     private ?string $price_total = null;
 
     #[ORM\Column]
     private ?\DateTime $created_at = null;
 
+    #[ORM\Column(type: Types::FLOAT, nullable: true)]
+    private ?float $modelMultiplier = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $notes = null;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getFilename(): ?string
-    {
-        return $this->filename;
-    }
-
-    public function setFilename(string $filename): static
-    {
-        $this->filename = $filename;
-
-        return $this;
     }
 
     public function getMaterial(): ?Material
@@ -136,26 +134,25 @@ class UserOrder
         return $this;
     }
 
-    public function getOrderState(): ?string
+    public function getOrderState(): OrderState
     {
         return $this->order_state;
     }
 
-    public function setOrderState(string $order_state): static
+    public function setOrderState(OrderState $state): static
     {
-        $this->order_state = $order_state;
-
+        $this->order_state = $state;
         return $this;
     }
 
     public function getDelieveryDate(): ?\DateTime
     {
-        return $this->delievery_date;
+        return $this->delivery_date;
     }
 
-    public function setDelieveryDate(\DateTime $delievery_date): static
+    public function setDelieveryDate(\DateTime $delivery_date): static
     {
-        $this->delievery_date = $delievery_date;
+        $this->delivery_date = $delivery_date;
 
         return $this;
     }
@@ -193,6 +190,39 @@ class UserOrder
     {
         $this->created_at = $created_at;
 
+        return $this;
+    }
+
+    public function getQuantity(): int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(int $quantity): static
+    {
+        $this->quantity = $quantity;
+        return $this;
+    }
+
+    public function getModelMultiplier(): ?float
+    {
+        return $this->modelMultiplier;
+    }
+
+    public function setModelMultiplier(?float $modelMultiplier): static
+    {
+        $this->modelMultiplier = $modelMultiplier;
+        return $this;
+    }
+
+    public function getNotes(): ?string
+    {
+        return $this->notes;
+    }
+
+    public function setNotes(?string $notes): static
+    {
+        $this->notes = $notes;
         return $this;
     }
 }

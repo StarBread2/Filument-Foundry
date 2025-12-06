@@ -181,7 +181,7 @@ document.addEventListener("DOMContentLoaded", () =>
                     });
 
                     // Set form action dynamically
-                    editForm.action = `/admin/edit-material/${id}`;
+                    editForm.action = `/management/edit-material/${id}`;
 
                     // Show modal
                     editModal.classList.remove("hidden");
@@ -201,24 +201,43 @@ document.addEventListener("DOMContentLoaded", () =>
     // ************************************EDIT MODAL************************************
 
     // ************************************SEARCH BAR************************************
-        document.getElementById("searchInput_materials").addEventListener("input", function () {
-            const searchValue_materials = this.value.toLowerCase();
-            const cards_materials = document.querySelectorAll(".material-card_materials");
+        const searchInput_materials = document.querySelector("#searchInput_materials");
+        const availabilityFilter_materials = document.querySelector("#availabilityFilter_materials"); // <-- new ID you'll add
+        const cards_materials = document.querySelectorAll(".material-card_materials");
+
+        function filterMaterials() {
+            const searchValue_materials = searchInput_materials.value.toLowerCase();
+            const selectedAvailability_materials = availabilityFilter_materials.value.toLowerCase();
 
             cards_materials.forEach(card => {
                 const name_materials = card.dataset.name_materials;
                 const details_materials = card.dataset.details_materials;
                 const properties_materials = card.dataset.properties_materials;
-                const price_materials = card.dataset.price_materials.toString(); // ensure searchable
+                const price_materials = card.dataset.price_materials.toString();
 
-                const matches_materials =
+                // Check availability (badge text)
+                const availability_materials = card.querySelector("span").textContent.toLowerCase();  
+                //     → "available" / "unavailable"
+
+                // Search match
+                const matchesSearch_materials =
                     name_materials.includes(searchValue_materials) ||
                     details_materials.includes(searchValue_materials) ||
                     properties_materials.includes(searchValue_materials) ||
                     price_materials.includes(searchValue_materials);
 
-                card.style.display = matches_materials ? "flex" : "none";
+                // Availability match
+                const matchesAvailability_materials =
+                    selectedAvailability_materials === "all" ||
+                    availability_materials === selectedAvailability_materials;
+
+                // Final visibility
+                card.style.display = (matchesSearch_materials && matchesAvailability_materials) ? "flex" : "none";
             });
-        });
+        }
+
+        // Event listeners
+        searchInput_materials.addEventListener("input", filterMaterials);
+        availabilityFilter_materials.addEventListener("change", filterMaterials);
     // ************************************SEARCH BAR************************************
 });

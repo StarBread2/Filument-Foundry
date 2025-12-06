@@ -1,0 +1,194 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Filument Foundry: Admin{% endblock %}
+
+{% block body %}
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col bg-[#f5ede5]">
+        <!-- Dashboard content -->
+        <main class="p-6 space-y-6">
+            <!-- Header -->
+            <div class="space-y-2">
+                <h1 class="text-3xl font-extrabold text-gray-900 mb-0">Dashboard</h1>
+                <p class="text-gray-600 text-base mt-0">
+                    {% if is_granted('ROLE_ADMIN') %}
+                        Overview of your 3D printing business
+                    {% else %}
+                        <span style="color: #B91C1C; font-weight: bold;">
+                            Mishandling orders is a serious violation. 
+                        </span>
+                        Errors may lead to disciplinary action.
+                    {% endif %}
+                </p>
+            </div>
+            
+            {# ONLY DISPLAY THE QUICK ACTIONS IF WORKER #}
+            {% if is_granted('ROLE_ADMIN') %}
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="bg-white rounded-lg p-4 shadow">
+                        <h3 class="text-gray-500 text-sm">Total Orders</h3>
+                        <p class="text-2xl font-bold">1,234</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-4 shadow">
+                        <h3 class="text-gray-500 text-sm">Revenue</h3>
+                        <p class="text-2xl font-bold">₱456,789</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-4 shadow">
+                        <h3 class="text-gray-500 text-sm">Active Projects</h3>
+                        <p class="text-2xl font-bold">87</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-4 shadow">
+                        <h3 class="text-gray-500 text-sm">Growth Rate</h3>
+                        <p class="text-2xl font-bold">23%</p>   
+                    </div>
+                </div>
+                <!-- Lower Section -->
+                <div class="flex flex-col md:flex-row gap-6">
+                    <!-- Order Status -->
+                    <div class="bg-white rounded-lg p-4 shadow w-full md:w-[400px]">
+                        <h3 class="text-lg font-semibold mb-4">Order Status Overview</h3>
+
+                        <ul class="space-y-3 text-sm">
+                            <li>
+                                <span 
+                                    class="px-3 py-1 text-sm rounded-full"
+                                    style="background-color: #FEF3C6; color: #AE5200;"
+                                >
+                                    Pending
+                                </span>
+                                <span class="float-right">15</span>
+                            </li>
+                            <li> 
+                                <span  
+                                    class="px-3 py-1 text-sm rounded-full"
+                                    style="background-color: #DBEAFE; color: #1D4ED8;"
+                                >
+                                    In Progress
+                                </span>
+                                <span class="float-right">32</span>
+                            </li>
+                            <li>
+                                <span 
+                                    class="px-3 py-1 text-sm rounded-full"
+                                    style="background-color: #DBFCE7; color: #246648;"
+                                >
+                                    Completed
+                                </span>
+                                <span class="float-right">156</span>
+                            </li>
+                            <li>
+                                <span 
+                                    class="px-3 py-1 text-sm rounded-full"
+                                    style="background-color: #FFE2E2; color: #AB0712;"
+                                >
+                                    Canceled
+                                </span>
+                                <span class="float-right">3</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Recent Orders -->
+                    <div class="bg-white rounded-lg p-4 shadow flex-1">
+                        <h3 class="text-lg font-semibold mb-4">Recent Orders</h3>
+                        {# ACTUAL ORDERS (ONLY SHOW 2) #}
+                        <ul 
+                            class="space-y-3 border-b "
+                            style="background-color: #ffffff; padding: 0.5rem 1rem; border-radius: 1rem;"
+                            onmouseover="this.style.backgroundColor='#F9F5F1';"
+                            onmouseout="this.style.backgroundColor='#ffffff';"
+                        >
+                            <li class="flex justify-between items-center">
+                                <div>
+                                    <p class="font-bold">ORD-001</p>
+                                    <p class="text-sm text-gray-500">John Doe • PLA • 2024-01-15</p>
+                                </div>
+                                <span  
+                                    class="px-3 py-1 text-sm rounded-full"
+                                    style="background-color: #DBEAFE; color: #1D4ED8;"
+                                >
+                                    In Progress
+                                </span>
+                                <span class="font-bold">₱2,450</span>
+                            </li>
+                        </ul>
+
+                        <ul 
+                            class="space-y-3 border-b "
+                            style="background-color: #ffffff; padding: 0.5rem 1rem; border-radius: 1rem;"
+                            onmouseover="this.style.backgroundColor='#F9F5F1';"
+                            onmouseout="this.style.backgroundColor='#ffffff';"
+                        >
+                            <li class="flex justify-between items-center">
+                                <div>
+                                    <p class="font-bold">ORD-001</p>
+                                    <p class="text-sm text-gray-500">John Doe • PLA • 2024-01-15</p>
+                                </div>
+                                <span  
+                                    class="px-3 py-1 text-sm rounded-full"
+                                    style="background-color: #DBEAFE; color: #1D4ED8;"
+                                >
+                                    In Progress
+                                </span>
+                                <span class="font-bold">₱2,450</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+
+            
+
+            <!-- Quick Actions Pad -->
+            <div class="bg-white rounded-lg p-6 shadow mt-6">
+                <h3 class="text-lg font-semibold mb-4">Quick Actions</h3>
+
+                <!-- Main Buttons -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full">
+
+                    <!-- Add New Material -->
+                    <a href="#" 
+                            id="button_modal_addMaterials"
+                            class="flex flex-col items-start gap-3 p-4 border rounded-lg hover:shadow-lg hover:bg-blue-50 transition-all cursor-pointer">
+                        <img src="{{ asset('images/admin/plus 1.svg') }}" alt="Add Icon" class="w-6 h-6">
+
+                        <div>
+                            <h4 class="font-semibold text-gray-900">Add New Material</h4>
+                            <p class="text-sm text-gray-500">Add a new printing material to the catalog</p>
+                        </div>
+                    </a>
+
+                    <!-- Add New Finish -->
+                    <a href="#" 
+                        id="button_modal_addFinishes"
+                        class="flex flex-col items-start gap-3 p-4 border rounded-lg hover:shadow-lg hover:bg-blue-50 transition-all cursor-pointer">
+                        <img src="{{ asset('images/admin/plus 1.svg') }}" alt="Add Icon" class="w-6 h-6">
+
+                        <div>
+                            <h4 class="font-semibold text-gray-900">Add New Finish</h4>
+                            <p class="text-sm text-gray-500">Add a new post-processing or finishing option</p>
+                        </div>
+                    </a>
+
+                    <!-- Add New Color -->
+                    <a href="#"
+                        id="button_modal_addColors"
+                        class="flex flex-col items-start gap-3 p-4 border rounded-lg hover:shadow-lg hover:bg-blue-50 transition-all cursor-pointer">
+                        <img src="{{ asset('images/admin/plus 1.svg') }}" alt="Add Icon" class="w-6 h-6">
+
+                        <div>
+                            <h4 class="font-semibold text-gray-900">Add New Color</h4>
+                            <p class="text-sm text-gray-500">Add a new filament color option</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    
+</div> <!-- NABILIN NA CLOSE FOR LEFT SIDEBAR -->
+
+{% endblock %}

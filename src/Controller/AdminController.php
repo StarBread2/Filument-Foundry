@@ -29,28 +29,35 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 // FILE SHIT
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+
 
 
 final class AdminController extends AbstractController
 {
-    #[Route('/admin/dashboard', name: 'admin_dashboard')]
+    #[Route('/management/dashboard', name: 'management_dashboard')]
     public function dashboard(): Response
     {
-        return $this->render('admin/dashboard.html.twig');
+        return $this->render('management/dashboard.html.twig');
     }
 
-    #[Route('/admin/orders', name: 'admin_orders')]
+    #[Route('/management/orders', name: 'management_orders')]
     public function orders(): Response
     {
-        return $this->render('admin/orders.html.twig');
+        return $this->render('management/orders.html.twig');
     }
 
     #****************************************USERS****************************************#
     #https://chatgpt.com/c/68d265c4-7ea8-8332-9ef4-ca7b35bdb23a
         # CREATE
-        #[Route('/admin/add-user', name: 'admin_add_user', methods: ['POST'])]
+        #[Route('/management/add-user', name: 'management_add_user', methods: ['POST'])]
         public function addUser(Request $request, EntityManagerInterface $em, ValidatorInterface $validator): Response
         {
+            if (!$this->isGranted('ROLE_ADMIN')) 
+            {
+                return $this->redirectToRoute('management_dashboard');
+            }
+
             $user = new User();
             $user->setPassword(password_hash($request->request->get('password'), PASSWORD_BCRYPT));
             $user->setFullName($request->request->get('fullName'));
@@ -59,11 +66,18 @@ final class AdminController extends AbstractController
             $user->setCreatedAt(new \DateTime());
 
             // twig returns 'admin' or 'user' then manually setroles depending on that
-            if ($request->request->get('role') === 'admin') {
+            if ($request->request->get('role') === 'admin') 
+            {
                 $user->setRoles(['ROLE_ADMIN']);
-            } else {
-                $user->setRoles(['ROLE_USER']);
+            } 
+            elseif ($request->request->get('role') === 'worker') 
+            {
+                $user->setRoles(['ROLE_WORKER']);
             }
+            else
+            {   
+                $user->setRoles(['ROLE_CUSTOMER']);
+            }   
 
             //Validate
             $errors = $validator->validate($user);
@@ -78,25 +92,31 @@ final class AdminController extends AbstractController
                 }
 
                 $this->addFlash('error', implode('<br>', $errorMessages));
-                return $this->redirectToRoute('admin_users');
+                return $this->redirectToRoute('management_users');
             }
 
             $em->persist($user);
             $em->flush();
 
             $this->addFlash('success', 'User added successfully!');
-            return $this->redirectToRoute('admin_users');
+            return $this->redirectToRoute('management_users');
         }
         
         # READ
-        #[Route('/admin/users', name: 'admin_users')]
+        #[Route('/management/users', name: 'management_users')]
         public function users(UserRepository $userRepository): Response
         {
+            if (!$this->isGranted('ROLE_ADMIN')) 
+            {
+                return $this->redirectToRoute('management_dashboard');
+            }
+
             $users = $userRepository->findAll();
 
             $totalUsers = count($users);
             $totalAdmins = 0;
             $totalCustomers = 0;
+            $totalWorkers = 0;
 
             foreach ($users as $user) 
             {
@@ -104,23 +124,29 @@ final class AdminController extends AbstractController
                 {
                     $totalAdmins++; // count admin users
                 } 
-                else 
+                else if(in_array('ROLE_WORKER', $user->getRoles()))
                 {
-                    $totalCustomers++; // count non-admin users
+                    $totalWorkers++; // count workers users
+                }
+                else
+                {
+                    $totalCustomers++; // count non worker users
                 }
             }
 
 
-            return $this->render('admin/users.html.twig', [
+            return $this->render('management/users.html.twig', [
                 'users' => $users,
                 'totalUsers' => $totalUsers,
                 'totalAdmins' => $totalAdmins,
                 'totalCustomers' => $totalCustomers,
+                'totalWorkers' => $totalWorkers,
             ]);
         }
 
         # UPDATE
-        #[Route('/admin/edit-user/{id}', name: 'admin_edit_user', methods: ['POST'])]
+        #[Route('/management/edit-user/{id}', name: 'management_edit_user', methods: ['POST'])]
+        #[IsGranted('ROLE_ADMIN')]
         public function editUser(Request $request, User $user, EntityManagerInterface $em): Response
         {
             $user->setEmail($request->request->get('email'));
@@ -128,11 +154,18 @@ final class AdminController extends AbstractController
             $user->setAddress($request->request->get('address'));
             
             // twig returns 'admin' or 'user' then manually setroles depending on that
-            if ($request->request->get('role') === 'admin') {
+            if ($request->request->get('role') === 'admin') 
+            {
                 $user->setRoles(['ROLE_ADMIN']);
-            } else {
-                $user->setRoles(['ROLE_USER']);
+            } 
+            elseif ($request->request->get('role') === 'worker') 
+            {
+                $user->setRoles(['ROLE_WORKER']);
             }
+            else
+            {   
+                $user->setRoles(['ROLE_CUSTOMER']);
+            } 
 
             $newPassword = $request->request->get('password');
             if (!empty($newPassword)) 
@@ -143,11 +176,12 @@ final class AdminController extends AbstractController
             $em->flush();
 
             $this->addFlash('success', 'User updated successfully!');
-            return $this->redirectToRoute('admin_users');
+            return $this->redirectToRoute('management_users');
         }
 
         # DELETE
-        #[Route('/admin/delete-user/{id}', name: 'admin_delete_user', methods: ['POST'])]
+        #[Route('/management/delete-user/{id}', name: 'management_delete_user', methods: ['POST'])]
+        #[IsGranted('ROLE_ADMIN')]
         public function deleteUser(User $user, EntityManagerInterface $em, Request $request): Response
         {
             if ($this->isCsrfTokenValid('delete_user', $request->request->get('_token'))) 
@@ -161,7 +195,7 @@ final class AdminController extends AbstractController
                 $this->addFlash('error', 'Invalid CSRF token.');
             }
 
-            return $this->redirectToRoute('admin_users');
+            return $this->redirectToRoute('management_users');
         }
     #****************************************USERS****************************************#
 
@@ -169,7 +203,7 @@ final class AdminController extends AbstractController
 
     #****************************************MATERIALS****************************************#
         # CREATE
-        #[Route('/admin/add-material', name: 'admin_add_material', methods: ['POST'])]
+        #[Route('/management/add-material', name: 'management_add_material', methods: ['POST'])]
         public function addMaterial(Request $request, EntityManagerInterface $em): Response
         {
             $material = new Material();
@@ -200,13 +234,13 @@ final class AdminController extends AbstractController
                 if ($imageFile->getSize() > $maxSize) 
                 {
                     $this->addFlash('error', 'Image too large (max 5 MB).');
-                    return $this->redirectToRoute('admin_materials');
+                    return $this->redirectToRoute('management_materials');
                 }
                 // Validate file type
                 if (!in_array($imageFile->getMimeType(), $allowedMimeTypes)) 
                 {
                     $this->addFlash('error', 'Invalid image format. Only JPG, PNG, or WEBP allowed.');
-                    return $this->redirectToRoute('admin_materials');
+                    return $this->redirectToRoute('management_materials');
                 }
 
 
@@ -239,7 +273,7 @@ final class AdminController extends AbstractController
                 catch (\Exception $e) 
                 {
                     $this->addFlash('error', 'Image upload failed: ' . $e->getMessage());
-                    return $this->redirectToRoute('admin_materials');
+                    return $this->redirectToRoute('management_materials');
                 }
             } 
             else 
@@ -249,23 +283,23 @@ final class AdminController extends AbstractController
             }
             
             $em->flush();
-            return $this->redirectToRoute('admin_materials');
+            return $this->redirectToRoute('management_materials');
         }
 
         # READ
-        #[Route('/admin/materials', name: 'admin_materials')]
+        #[Route('/management/materials', name: 'management_materials')]
         public function materials(MaterialRepository $materialRepository): Response
         {
             $materials = $materialRepository->findAll();
 
-            return $this->render('admin/materials.html.twig',[
+            return $this->render('management/materials.html.twig',[
                 'materials' => $materials,
             ]);
 
         }
 
         # UPDATE
-        #[Route('/admin/edit-material/{id}', name: 'admin_edit_material', methods: ['POST'])]
+        #[Route('/management/edit-material/{id}', name: 'management_edit_material', methods: ['POST'])]
         public function editMaterial(Request $request, Material $material, EntityManagerInterface $em): Response
         {
             $material->setName($request->request->get('material_name'));
@@ -294,11 +328,11 @@ final class AdminController extends AbstractController
 
                 if ($imageFile->getSize() > $maxSize) {
                     $this->addFlash('error', 'Image too large (max 5 MB).');
-                    return $this->redirectToRoute('admin_materials');
+                    return $this->redirectToRoute('management_materials');
                 }
                 if (!in_array($imageFile->getMimeType(), $allowedMimeTypes)) {
                     $this->addFlash('error', 'Invalid image format. Only JPG, PNG, or WEBP allowed.');
-                    return $this->redirectToRoute('admin_materials');
+                    return $this->redirectToRoute('management_materials');
                 }
 
                 // Delete old image first
@@ -329,19 +363,19 @@ final class AdminController extends AbstractController
                     $material->setImagePath('uploads/Materials/' . $newFilename);
                 } catch (\Exception $e) {
                     $this->addFlash('error', 'Image upload failed: ' . $e->getMessage());
-                    return $this->redirectToRoute('admin_materials');
+                    return $this->redirectToRoute('management_materials');
                 }
             }
 
             $em->flush();
 
             $this->addFlash('success', 'Material updated successfully!');
-            return $this->redirectToRoute('admin_materials');
+            return $this->redirectToRoute('management_materials');
         }
 
 
         # DELETE
-        #[Route('/admin/delete-material/{id}', name: 'admin_delete_material', methods: ['POST'])]
+        #[Route('/management/delete-material/{id}', name: 'management_delete_material', methods: ['POST'])]
         public function deleteMaterial(Material $material, EntityManagerInterface $em, Request $request): Response
         {
             if ($this->isCsrfTokenValid('delete_material', $request->request->get('_token'))) 
@@ -367,7 +401,7 @@ final class AdminController extends AbstractController
                 $this->addFlash('error', 'Invalid CSRF token.');
             }
 
-            return $this->redirectToRoute('admin_materials');
+            return $this->redirectToRoute('management_materials');
         }
     #****************************************MATERIALS****************************************#
 
@@ -375,7 +409,7 @@ final class AdminController extends AbstractController
 
     #****************************************FINISHES****************************************#
         # CREATE
-        #[Route('/admin/add-finish', name: 'admin_add_finish', methods: ['POST'])]
+        #[Route('/management/add-finish', name: 'management_add_finish', methods: ['POST'])]
         public function addFinish(Request $request, EntityManagerInterface $em): Response
         {
             $finish = new Finish();
@@ -400,13 +434,13 @@ final class AdminController extends AbstractController
                 if ($imageFile->getSize() > $maxSize) 
                 {
                     $this->addFlash('error', 'Image too large (max 5 MB).');
-                    return $this->redirectToRoute('admin_finishes');
+                    return $this->redirectToRoute('management_finishes');
                 }
 
                 if (!in_array($imageFile->getMimeType(), $allowedMimeTypes)) 
                 {
                     $this->addFlash('error', 'Invalid image format. Only JPG, PNG, or WEBP allowed.');
-                    return $this->redirectToRoute('admin_finishes');
+                    return $this->redirectToRoute('management_finishes');
                 }
 
                 $safeName = preg_replace('/[^a-zA-Z0-9_-]/', '_', pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME));
@@ -430,7 +464,7 @@ final class AdminController extends AbstractController
                 } catch (\Exception $e) 
                 {
                     $this->addFlash('error', 'Image upload failed: ' . $e->getMessage());
-                    return $this->redirectToRoute('admin_finishes');
+                    return $this->redirectToRoute('management_finishes');
                 }
             } 
             else 
@@ -439,22 +473,22 @@ final class AdminController extends AbstractController
             }
 
             $em->flush();
-            return $this->redirectToRoute('admin_finishes');
+            return $this->redirectToRoute('management_finishes');
         }
 
         # READ
-        #[Route('/admin/finishes', name: 'admin_finishes')]
+        #[Route('/management/finishes', name: 'management_finishes')]
         public function finishes(FinishRepository $finishRepository): Response
         {
             $finishes = $finishRepository->findAll();
 
-            return $this->render('admin/finishes.html.twig', [
+            return $this->render('management/finishes.html.twig', [
                 'finishes' => $finishes,
             ]);
         }
 
         # UPDATE
-        #[Route('/admin/edit-finish/{id}', name: 'admin_edit_finish', methods: ['POST'])]
+        #[Route('/management/edit-finish/{id}', name: 'management_edit_finish', methods: ['POST'])]
         public function editFinish(Finish $finish, Request $request, EntityManagerInterface $em): Response 
         {
             $finish->setName($request->request->get('finish_name'));
@@ -485,12 +519,12 @@ final class AdminController extends AbstractController
 
             $em->flush();
             $this->addFlash('success', 'Finish updated successfully!');
-            return $this->redirectToRoute('admin_finishes');
+            return $this->redirectToRoute('management_finishes');
         }
 
 
         # DELETE
-        #[Route('/admin/delete-finish/{id}', name: 'admin_delete_finish', methods: ['POST'])]
+        #[Route('/management/delete-finish/{id}', name: 'management_delete_finish', methods: ['POST'])]
         public function deleteFinish(Finish $finish, EntityManagerInterface $em, Request $request): Response
         {
             if ($this->isCsrfTokenValid('delete_finish', $request->request->get('_token'))) 
@@ -518,14 +552,14 @@ final class AdminController extends AbstractController
                 $this->addFlash('error', 'Invalid CSRF token.');
             }
 
-            return $this->redirectToRoute('admin_finishes');
+            return $this->redirectToRoute('management_finishes');
         }
     #****************************************FINISHES****************************************#
 
 
 
     #****************************************COLORS****************************************#
-        #[Route('/admin/add-colors', name: 'admin_add_colors', methods: ['POST'])]
+        #[Route('/management/add-colors', name: 'management_add_colors', methods: ['POST'])]
         public function addColors(Request $request, EntityManagerInterface $em): Response
         {
             $color = new Color();
@@ -558,13 +592,13 @@ final class AdminController extends AbstractController
                     if ($imageFile->getSize() > $maxSize) 
                     {
                         $this->addFlash('error', 'Image too large (max 5 MB).');
-                        return $this->redirectToRoute('admin_colors');
+                        return $this->redirectToRoute('management_colors');
                     }
 
                     if (!in_array($imageFile->getMimeType(), $allowedMimeTypes)) 
                     {
                         $this->addFlash('error', 'Invalid image format. Only JPG, PNG, or WEBP allowed.');
-                        return $this->redirectToRoute('admin_colors');
+                        return $this->redirectToRoute('management_colors');
                     }
 
                     $safeName = preg_replace('/[^a-zA-Z0-9_-]/', '_', pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME));
@@ -589,7 +623,7 @@ final class AdminController extends AbstractController
                     catch (\Exception $e) 
                     {
                         $this->addFlash('error', 'Image upload failed: ' . $e->getMessage());
-                        return $this->redirectToRoute('admin_colors');
+                        return $this->redirectToRoute('management_colors');
                     }
                 }
                 else 
@@ -603,22 +637,22 @@ final class AdminController extends AbstractController
             $em->persist($color);
             $em->flush();
 
-            return $this->redirectToRoute('admin_colors');
+            return $this->redirectToRoute('management_colors');
         }
 
         # READ
-        #[Route('/admin/colors', name: 'admin_colors')]
+        #[Route('/management/colors', name: 'management_colors')]
         public function colors(colorRepository $colorRepository): Response
         {
             $colors = $colorRepository->findAll();
 
-            return $this->render('admin/colors.html.twig',[
+            return $this->render('management/colors.html.twig',[
                 'colors' => $colors,
             ]);
         }
 
         # UPDATE
-        #[Route('/admin/edit-color/{id}', name: 'admin_edit_color', methods: ['POST'])]
+        #[Route('/management/edit-color/{id}', name: 'management_edit_color', methods: ['POST'])]
         public function editColor(Color $color, Request $request, EntityManagerInterface $em): Response 
         {
             $appearanceType = $request->request->get('appearance_type'); // "hex" or "image"
@@ -650,12 +684,12 @@ final class AdminController extends AbstractController
 
                     if ($imageFile->getSize() > $maxSize) {
                         $this->addFlash('error', 'Image too large (max 5 MB).');
-                        return $this->redirectToRoute('admin_colors');
+                        return $this->redirectToRoute('management_colors');
                     }
 
                     if (!in_array($imageFile->getMimeType(), $allowedMimeTypes)) {
                         $this->addFlash('error', 'Invalid image format. Only JPG, PNG, or WEBP allowed.');
-                        return $this->redirectToRoute('admin_colors');
+                        return $this->redirectToRoute('management_colors');
                     }
 
                     if (!file_exists($uploadsDir)) mkdir($uploadsDir, 0777, true);
@@ -676,15 +710,11 @@ final class AdminController extends AbstractController
 
             $em->flush();
             $this->addFlash('success', 'Color updated successfully!');
-            return $this->redirectToRoute('admin_colors');
+            return $this->redirectToRoute('management_colors');
         }
 
-
-
-
-
         # DELETE
-        #[Route('/admin/delete-color/{id}', name: 'admin_delete_color', methods: ['POST'])]
+        #[Route('/management/delete-color/{id}', name: 'management_delete_color', methods: ['POST'])]
         public function deleteColor(Color $color, EntityManagerInterface $em, Request $request): Response
         {
             if ($this->isCsrfTokenValid('delete_color', $request->request->get('_token'))) {
@@ -704,13 +734,13 @@ final class AdminController extends AbstractController
                 $this->addFlash('error', 'Invalid CSRF token.');
             }
 
-            return $this->redirectToRoute('admin_colors');
+            return $this->redirectToRoute('management_colors');
         }
     #****************************************COLORS****************************************#
 
-    #[Route('/admin/settings', name: 'admin_settings')]
+    #[Route('/management/settings', name: 'management_settings')]
     public function settings(): Response
     {
-        return $this->render('admin/settings.html.twig');
+        return $this->render('management/settings.html.twig');
     }
 }

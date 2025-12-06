@@ -63,7 +63,16 @@
                             placeholder="Enter your password"
                             required
                         >
-                        <span id="togglePassword" class="absolute right-4 top-3 text-gray-500 cursor-pointer">👁</span>
+                        <img 
+                            id="togglePassword"
+                            src="{{ asset('images/partials/eye.svg') }}"
+                            data-eye="{{ asset('images/partials/eye.svg') }}"
+                            data-eye-off="{{ asset('images/partials/eyeOff.svg') }}"
+                            alt="Eye Icon"
+                            class="absolute right-4 top-4 text-gray-500 cursor-pointer" 
+                            style="width: 20px; height: 20px;"
+                        >
+                        {# <span id="togglePassword" class="absolute right-4 top-3 text-gray-500 cursor-pointer">👁</span> #}
                         <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
                     </div>
                 </div>

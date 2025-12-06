@@ -26,11 +26,11 @@
 
         {% set modals = 
         {
-            'admin_dashboard': ['admin/partials/materials_modal.html.twig', 'admin/partials/finishes_modal.html.twig', 'admin/partials/colors_modal.html.twig'],
-            'admin_users': ['admin/partials/users_modal.html.twig'],
-            'admin_materials': ['admin/partials/materials_modal.html.twig'],
-            'admin_finishes': ['admin/partials/finishes_modal.html.twig'],
-            'admin_colors': ['admin/partials/colors_modal.html.twig'],
+            'management_dashboard': ['management/partials/materials_modal.html.twig', 'management/partials/finishes_modal.html.twig', 'management/partials/colors_modal.html.twig'],
+            'management_users': ['management/partials/users_modal.html.twig'],
+            'management_materials': ['management/partials/materials_modal.html.twig'],
+            'management_finishes': ['management/partials/finishes_modal.html.twig'],
+            'management_colors': ['management/partials/colors_modal.html.twig'],
             'app_login': [],
             'app_register': []
         } %}
@@ -45,8 +45,8 @@
         <!-- Nav Bar for admin and default web -->
         <!-- Nav Bar admin NAAY WALA NA CLOSE NA DIV!!!!, (CLOSE EVERY MAIN CONTENT)-->
             {% set admin_routes = [
-                'admin_dashboard', 'admin_orders', 'admin_products', 'admin_users',
-                'admin_materials', 'admin_finishes', 'admin_colors', 'admin_settings'
+                'management_dashboard', 'management_orders', 'management_products', 'management_users',
+                'management_materials', 'management_finishes', 'management_colors', 'management_settings'
             ] %}
 
             {# STANDALONE PAGES (NO NAVBAR) #}
@@ -71,14 +71,19 @@
 
         <!-- Admin Button -->
         <!-- Changes the button if home = "go to admin" else "go back to web" -->
-            {% if app.user is not null and is_granted('ROLE_ADMIN') %}
+            {% if app.user is not null and (is_granted('ROLE_ADMIN') or is_granted('ROLE_WORKER')) %}
                 {% if app.request.attributes.get('_route') not in admin_routes %}
-                    <a href="{{ path('admin_dashboard') }}" 
+                    <a href="{{ path('management_dashboard') }}" 
                     class="fixed bottom-12 right-4 
                             text-black font-semibold px-4 py-2 rounded-md 
                             bg-[rgb(251,165,3)] hover:bg-[rgb(252,175,36)] 
-                            transition-colors shadow-lg">
+                            transition-colors shadow-lg"
+                    >
+                        {% if is_granted('ROLE_WORKER') %}
+                            Worker Panel
+                        {% else %}
                             Admin Panel
+                        {% endif %}
                     </a>
                 {% endif %}
             {% endif %}

@@ -10,7 +10,7 @@
                 <!-- Left side: Title + Subtitle -->
                 <div class="space-y-1">
                     <h1 class="text-3xl font-extrabold text-gray-900">Materials Management</h1>
-                    <p class="text-gray-600 text-base">Manage your 3D printing materials catalog</p>
+                    <p class="text-gray-600 text-base">Manage 3D printing materials catalog</p>
                 </div>
 
                 <!-- Right side: Button -->
@@ -23,14 +23,35 @@
             </div>
 
             <!-- Search-->
-            <div class="flex items-center justify-between gap-4 mt-4 w-full">
-                <input id="searchInput_materials" type="text" placeholder="Search materials..."
-                    class="flex-1 py-2 px-2 text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-400 focus:outline-none text-gray-800 font-medium shadow-sm">
-                <button style="background-color: #1E1E18;"
-                    class="text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-800 transition">
-                    <img src="{{ asset('images/admin/search.svg') }}" alt="Search Icon" class="w-4 h-4">
-                    Search
-                </button>
+            <div class="flex items-center justify-between mt-4 gap-3">
+                <!-- Search Input -->
+                <div class="flex items-center bg-white px-4 py-2 rounded-xl shadow w-full">
+                    <img src="{{ asset('images/partials/search.svg') }}"
+                        alt="Orders Icon"
+                        style="width: 20px; height: 20px; margin-right: 20px;">
+                    <input id="searchInput_materials" type="text" placeholder="Search material..."
+                        placeholder="Search orders..."
+                        class="w-full focus:outline-none text-gray-700" />
+                </div>
+
+                {# SEARCH #}
+                <div class="relative inline-block">
+                    <!-- Status Filter -->
+                    <select 
+                        id="availabilityFilter_materials"
+                        class="ml-4 bg-white px-4 py-2 rounded-xl shadow text-gray-700 appearance-none" style="padding-right: 3rem;"
+                    > 
+                        <option value="all" >All Availability</option>
+                        <option value="available" >Available</option>
+                        <option value="unavailable" >Unavailable</option>
+                    </select>
+                    <!-- Custom arrow -->
+                    <div style="pointer-events: none; position: absolute; top: 0; bottom: 0; right: 0.5rem; display: flex; align-items: center;">
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+                </div>
             </div>
 
             {# https://chatgpt.com/c/68ea6fe0-1328-8323-90f7-af2f3d12e8ea #}
@@ -106,7 +127,7 @@
                                 type="button"
                                 class="deleteMaterialBtn border border-gray-400 px-2 py-2 rounded-xl font-medium flex items-center gap-2 text-black
                                     bg-[#f5ede5] hover:bg-[rgb(251,165,3)] transition-colors"
-                                data-delete-url="{{ path('admin_delete_material', { id: material.id }) }}"
+                                data-delete-url="{{ path('management_delete_material', { id: material.id }) }}"
                                 data-material-name="{{ material.name }}"
                             >
                                 <img src="{{ asset('images/admin/trash 2.svg') }}" alt="Trash Icon" class="w-4 h-4">

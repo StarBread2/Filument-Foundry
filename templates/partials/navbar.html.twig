@@ -60,6 +60,8 @@
                                 {{ app.user.fullName|split(' ')[0]|capitalize }}
                                 {% if is_granted('ROLE_ADMIN') %}
                                     (admin)
+                                {% elseif is_granted('ROLE_WORKER') %}
+                                    (worker)
                                 {% endif %}
                             </span>
                         </div>

@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     document.getElementById("edit-address").value = address;
                     document.getElementById("edit-role").value = role;
 
-                    formEdit.action = `/admin/edit-user/${id}`;
+                    formEdit.action = `/management/edit-user/${id}`;
                     editModal.classList.remove("hidden");
                 });
             });
@@ -136,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         // Role filter
-        $('select').on('change', function () {
+        $('#roleFilter').on('change', function () {
             var role = $(this).val();
             if (role === "All Roles") {
                 table.columns(3).search('').draw(); // Clear role filter

@@ -1,7 +1,14 @@
 <!-- Top Navbar -->
 <header class="flex justify-between items-center bg-white border-b px-6 py-3 shadow">
     <!-- Left side: Title -->
-    <h1 class="text-2xl font-bold">Filument Foundry Admin</h1>
+    <h1 class="text-2xl font-bold">
+        Filument Foundry 
+        {% if is_granted('ROLE_WORKER') %}
+            Worker
+        {% else %}
+            Admin
+        {% endif %}
+    </h1>
 
     <!-- Right side: Button -->
     <a href="{{ path('home_index') }}" 
@@ -19,82 +26,84 @@
     <!-- Left Navbar -->
     <aside class="w-64 bg-white border-r p-4">
             <nav class="space-y-2">
-                <a href="{{ path('admin_dashboard') }}"
+                <a href="{{ path('management_dashboard') }}"
                     class="flex items-center gap-2 px-3 py-2 rounded-md font-medium transition
-                    {{ currentRoute == 'admin_dashboard' 
+                    {{ currentRoute == 'management_dashboard' 
                     ? 'bg-black text-white' 
                     : 'bg-white text-black hover:bg-[rgb(251,165,3)]' }}">
                     <img src="{{ asset('images/admin navbar/Dashboard.svg') }}"
                         alt="Dashboard Icon"
-                        class="w-4 h-4 {{ currentRoute == 'admin_dashboard' ? 'invert brightness-0' : '' }}">
+                        class="w-4 h-4 {{ currentRoute == 'management_dashboard' ? 'invert brightness-0' : '' }}">
                     Dashboard
                 </a>
 
-                <a href="{{ path('admin_orders') }}"
+                <a href="{{ path('management_orders') }}"
                     class="flex items-center gap-2 px-3 py-2 rounded-md font-medium transition
-                    {{ currentRoute == 'admin_orders' 
+                    {{ currentRoute == 'management_orders' 
                     ? 'bg-black text-white' 
                     : 'bg-white text-black hover:bg-[rgb(251,165,3)]' }}">
                     <img src="{{ asset('images/admin navbar/orders.svg') }}"
                         alt="Orders Icon"
-                        class="w-4 h-4 {{ currentRoute == 'admin_orders' ? 'invert brightness-0' : '' }}">
+                        class="w-4 h-4 {{ currentRoute == 'management_orders' ? 'invert brightness-0' : '' }}">
                     Orders
                 </a>
 
-                <a href="{{ path('admin_users') }}"
-                    class="flex items-center gap-2 px-3 py-2 rounded-md font-medium transition
-                    {{ currentRoute == 'admin_users' 
-                    ? 'bg-black text-white' 
-                    : 'bg-white text-black hover:bg-[rgb(251,165,3)]' }}">
-                    <img src="{{ asset('images/admin navbar/users.svg') }}"
-                        alt="Orders Icon"
-                        class="w-4 h-4 {{ currentRoute == 'admin_users' ? 'invert brightness-0' : '' }}">
-                    Users
-                </a>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('management_users') }}"
+                        class="flex items-center gap-2 px-3 py-2 rounded-md font-medium transition
+                        {{ currentRoute == 'management_users' 
+                        ? 'bg-black text-white' 
+                        : 'bg-white text-black hover:bg-[rgb(251,165,3)]' }}">
+                        <img src="{{ asset('images/admin navbar/users.svg') }}"
+                            alt="Orders Icon"
+                            class="w-4 h-4 {{ currentRoute == 'management_users' ? 'invert brightness-0' : '' }}">
+                        Users
+                    </a>
+                {% endif %}
 
-                <a href="{{ path('admin_materials') }}"
+                <a href="{{ path('management_materials') }}"
                     class="flex items-center gap-2 px-3 py-2 rounded-md font-medium transition
-                    {{ currentRoute == 'admin_materials' 
+                    {{ currentRoute == 'management_materials' 
                     ? 'bg-black text-white' 
                     : 'bg-white text-black hover:bg-[rgb(251,165,3)]' }}">
                     <img src="{{ asset('images/admin navbar/Materials.svg') }}"
                         alt="Materials Icon"
-                        class="w-4 h-4 {{ currentRoute == 'admin_materials' ? 'invert brightness-0' : '' }}">
+                        class="w-4 h-4 {{ currentRoute == 'management_materials' ? 'invert brightness-0' : '' }}">
                     Materials
                 </a>
 
-                <a href="{{ path('admin_finishes') }}"
+                <a href="{{ path('management_finishes') }}"
                     class="flex items-center gap-2 px-3 py-2 rounded-md font-medium transition
-                    {{ currentRoute == 'admin_finishes' 
+                    {{ currentRoute == 'management_finishes' 
                     ? 'bg-black text-white' 
                     : 'bg-white text-black hover:bg-[rgb(251,165,3)]' }}">
                     <img src="{{ asset('images/admin navbar/Finishes.svg') }}"
                         alt="Finishes Icon"
-                        class="w-4 h-4 {{ currentRoute == 'admin_finishes' ? 'invert brightness-0' : '' }}">
+                        class="w-4 h-4 {{ currentRoute == 'management_finishes' ? 'invert brightness-0' : '' }}">
                     Finishes
                 </a>
 
-                <a href="{{ path('admin_colors') }}"
+                <a href="{{ path('management_colors') }}"
                     class="flex items-center gap-2 px-3 py-2 rounded-md font-medium transition
-                    {{ currentRoute == 'admin_colors' 
+                    {{ currentRoute == 'management_colors' 
                     ? 'bg-black text-white' 
                     : 'bg-white text-black hover:bg-[rgb(251,165,3)]' }}">
                     <img src="{{ asset('images/admin navbar/pallete.svg') }}"
                         alt="Colors Icon"
-                        class="w-4 h-4 {{ currentRoute == 'admin_colors' ? 'invert brightness-0' : '' }}">
+                        class="w-4 h-4 {{ currentRoute == 'management_colors' ? 'invert brightness-0' : '' }}">
                     Colors
                 </a>
 
-                <a href="{{ path('admin_settings') }}"
+                {# <a href="{{ path('management_settings') }}"
                     class="flex items-center gap-2 px-3 py-2 rounded-md font-medium transition
-                    {{ currentRoute == 'admin_settings' 
+                    {{ currentRoute == 'management_settings' 
                     ? 'bg-black text-white' 
                     : 'bg-white text-black hover:bg-[rgb(251,165,3)]' }}">
                     <img src="{{ asset('images/admin navbar/Settings.svg') }}"
                         alt="Settings Icon"
-                        class="w-4 h-4 {{ currentRoute == 'admin_settings' ? 'invert brightness-0' : '' }}">
+                        class="w-4 h-4 {{ currentRoute == 'management_settings' ? 'invert brightness-0' : '' }}">
                     Settings
-                </a>
+                </a> #}
             </nav>
         </aside>
     
