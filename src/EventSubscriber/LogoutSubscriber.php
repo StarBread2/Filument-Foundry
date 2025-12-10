@@ -8,9 +8,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Log;
 use App\Entity\User;
 
+use Symfony\Component\HttpFoundation\RequestStack;
+
 class LogoutSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private EntityManagerInterface $em) {}
+    public function __construct(private EntityManagerInterface $em, private RequestStack $requestStack) {}
 
     public function onLogout(LogoutEvent $event): void
     {
@@ -31,6 +33,12 @@ class LogoutSubscriber implements EventSubscriberInterface
         $log->setAction('Logout'); // action = logout
         $log->setTarget(null);
         $log->setDatetimestamp(new \DateTime());
+
+        // Get IP address from the current request
+        $request = $this->requestStack->getCurrentRequest();
+        if ($request) {
+            $log->setIpAddress($request->getClientIp());
+        }
 
         $this->em->persist($log);
         $this->em->flush();

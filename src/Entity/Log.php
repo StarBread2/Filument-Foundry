@@ -26,6 +26,9 @@ class Log
     #[ORM\Column]
     private ?\DateTime $datetimestamp = null;
 
+    #[ORM\Column(length: 45, nullable: true)]
+    private ?string $ipAddress = null; 
+
     public function getId(): ?int
     {
         return $this->id;
@@ -76,6 +79,17 @@ class Log
     {
         $this->datetimestamp = $datetimestamp;
 
+        return $this;
+    }
+
+    public function getIpAddress(): ?string
+    {
+        return $this->ipAddress;
+    }
+
+    public function setIpAddress(?string $ipAddress): static
+    {
+        $this->ipAddress = $ipAddress;
         return $this;
     }
 }

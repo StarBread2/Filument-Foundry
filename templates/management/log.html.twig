@@ -60,6 +60,7 @@
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Role</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Action</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Target</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">IP Address</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Timestamp</th>
                     </tr>
                 </thead>
@@ -104,6 +105,11 @@
                         <!-- TARGET -->
                         <td class="px-6 py-4 text-gray-700">
                             {{ log.target ?? '-' }}
+                        </td>
+
+                        <!-- IP ADDRESS -->
+                        <td class="px-6 py-4 text-gray-700">
+                            {{ log.ipAddress ?? '-' }}
                         </td>
 
                         <!-- TIMESTAMP -->

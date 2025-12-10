@@ -394,6 +394,9 @@ document.addEventListener("DOMContentLoaded", () => {
         // Confirm → send AJAX request
         confirmStatusBtn.addEventListener("click", async () => {
 
+            // Immediately hide modal so it can't be pressed again
+            statusModal.classList.add("hidden");
+
             const payload = {
                 newStatus: newStatusValue,
                 _csrf_token: csrfUpdateStatus
