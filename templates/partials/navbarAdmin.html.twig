@@ -13,11 +13,11 @@
     <!-- Right side: Button -->
     <a href="{{ path('home_index') }}" 
         class="flex items-center gap-2 text-black font-semibold px-4 py-2 rounded-md 
-                bg-[rgb(251,165,3)] hover:bg-[rgb(252,175,36)] 
-                transition-colors shadow-lg">
-            <img src="{{ asset('images/admin navbar/Log out.svg') }}" alt="Upload Icon" class="w-4 h-4">
-            Back to Site
-        </a>
+            bg-[rgb(251,165,3)] hover:bg-[rgb(252,175,36)] 
+            transition-colors shadow-lg">
+        <img src="{{ asset('images/admin navbar/Log out.svg') }}" alt="Upload Icon" class="w-4 h-4">
+        Back to Site
+    </a>
 </header>
 
 {# CURRENTROUTE IN BASE HTML TWIG#}
@@ -93,6 +93,19 @@
                         class="w-4 h-4 {{ currentRoute == 'management_colors' ? 'invert brightness-0' : '' }}">
                     Colors
                 </a>
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('management_log') }}"
+                        class="flex items-center gap-2 px-3 py-2 rounded-md font-medium transition
+                        {{ currentRoute == 'management_log' 
+                        ? 'bg-black text-white' 
+                        : 'bg-white text-black hover:bg-[rgb(251,165,3)]' }}">
+                        <img src="{{ asset('images/admin navbar/Log.svg') }}"
+                            alt="Colors Icon"
+                            class="w-4 h-4 {{ currentRoute == 'management_log' ? 'invert brightness-0' : '' }}">
+                        Activity Log
+                    </a>
+                {% endif %}
 
                 {# <a href="{{ path('management_settings') }}"
                     class="flex items-center gap-2 px-3 py-2 rounded-md font-medium transition

@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}404 - Page Not Found{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-background flex items-center justify-center px-6">
+    <div class="max-w-2xl w-full text-center">
+
+        {# --- Animated Logo --- #}
+        <div class="flex justify-center mb-8">
+            <div class="relative">
+                <div style="width:8rem;height:8rem;background-color:rgba(251,165,3,0.1);border-radius:9999px;display:flex;align-items:center;justify-content:center;animation:pulse 2s cubic-bezier(0.4,0,0.6,1) infinite;">
+                    <div style="width:6rem;height:6rem;background-color:rgba(251,165,3,0.2);border-radius:9999px;display:flex;align-items:center;justify-content:center;">
+                        <img src="{{ asset('images/Error/404/Hexagon.svg') }}" alt="Hexagon" class="w-24 h-24">
+                    </div>
+                </div>
+
+                <div style="position:absolute;top:-0.5rem;right:-0.5rem;width:1.5rem;height:1.5rem;background-color:#FBA503;border-radius:9999px;"></div>
+                <div style="position:absolute;bottom:-0.5rem;left:-0.5rem;width:1rem;height:1rem;background-color:#129CDD;border-radius:9999px;"></div>
+            </div>
+        </div>
+
+        {# --- Error Code --- #}
+        <div class="mb-6">
+            <h1 class="text-9xl text-primary mb-4 tracking-tight font-extrabold">
+                404
+            </h1>
+            <div class="flex items-center justify-center gap-3 mb-4">
+                <div class="h-1 w-12 bg-secondary rounded-full"></div>
+                <div class="h-1 w-12 bg-accent rounded-full"></div>
+            </div>
+        </div>
+
+        {# --- Error Message --- #}
+        <h2 class="text-4xl text-foreground mb-4 font-extrabold">
+            Page Not Found
+        </h2>
+        <p class="text-xl mb-8 max-w-md mx-auto" style="color: rgba(0,0,0,0.6);">
+            Oops! It looks like this page doesn't exist in our digital foundry. Let's get you back on track.
+        </p>
+
+        {# --- Action Buttons --- #}
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+            <a href="{{ path('home_index') }}"
+                class="h-12 px-5 flex items-center rounded-xl transition"
+                style="background-color: #1E1E18 ;"
+                onmouseover="this.style.backgroundColor='#333333';"
+                onmouseout="this.style.backgroundColor='#1E1E18';">
+                <img src="{{ asset('images/Error/404/Home.svg') }}" alt="Home Icon" class="w-5 h-5">
+                <span class="ml-2 text-white">Back to Home</span>
+            </a>
+        </div>
+
+        {# --- Helpful Links --- #}
+        {# <div class="bg-card border border-border rounded-xl p-8">
+            <h3 class="text-xl text-foreground mb-4 font-extrabold">
+                Looking for something specific?
+            </h3>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+                <a href="{{ path('app_home') }}"
+                    class="p-4 rounded-lg border border-border hover:border-secondary hover:bg-secondary/5 transition-all group">
+                    <div class="w-10 h-10 bg-secondary/10 rounded-lg flex items-center justify-center mx-auto mb-2
+                        group-hover:bg-secondary/20 transition">
+                        {{ include('icons/home.svg') }}
+                    </div>
+                    <p class="text-foreground group-hover:text-secondary transition">Homepage</p>
+                </a>
+
+                <a href="/services"
+                    class="p-4 rounded-lg border border-border hover:border-accent hover:bg-accent/5 transition-all group">
+                    <div class="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center mx-auto mb-2
+                        group-hover:bg-accent/20 transition">
+                        {{ include('icons/hexagon.svg') }}
+                    </div>
+                    <p class="text-foreground group-hover:text-accent transition">Our Services</p>
+                </a>
+
+                <a href="javascript:history.back();"
+                    class="p-4 rounded-lg border border-border hover:border-primary hover:bg-primary/5 transition-all group">
+                    <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-2
+                        group-hover:bg-primary/20 transition">
+                        {{ include('icons/arrow-left.svg') }}
+                    </div>
+                    <p class="text-foreground group-hover:text-primary transition">Go Back</p>
+                </a>
+
+            </div>
+        </div> #}
+
+        {# --- Tagline --- #}
+        <div class="mt-12">
+            <p style="color: rgba(0,0,0,0.6);font-style:italic;">
+                Turning digital dreams into physical reality.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

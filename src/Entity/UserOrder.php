@@ -50,10 +50,10 @@ class UserOrder
     #[ORM\Column(enumType: OrderState::class)]
     private OrderState $order_state = OrderState::PENDING;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTime $delivery_date = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTime $delivery_arrival = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
@@ -67,6 +67,9 @@ class UserOrder
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $notes = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $delivery_location = null;
 
     public function getId(): ?int
     {
@@ -145,12 +148,12 @@ class UserOrder
         return $this;
     }
 
-    public function getDelieveryDate(): ?\DateTime
+    public function getDeliveryDate(): ?\DateTime
     {
         return $this->delivery_date;
     }
 
-    public function setDelieveryDate(\DateTime $delivery_date): static
+    public function setDeliveryDate(\DateTime $delivery_date): static
     {
         $this->delivery_date = $delivery_date;
 
@@ -223,6 +226,26 @@ class UserOrder
     public function setNotes(?string $notes): static
     {
         $this->notes = $notes;
+        return $this;
+    }
+
+    //GET THE PROJECT NAME BY LAST / AND REMOVE FILE EXTENSION
+    public function getProjectName(): string
+    {
+        if (!$this->file_path) return 'Unknown';
+
+        $file = basename($this->file_path); // test.obj
+        return ucfirst(pathinfo($file, PATHINFO_FILENAME)); // Test
+    }
+
+    public function getDeliveryLocation(): ?string
+    {
+        return $this->delivery_location;
+    }
+
+    public function setDeliveryLocation(?string $delivery_location): static
+    {
+        $this->delivery_location = $delivery_location;
         return $this;
     }
 }

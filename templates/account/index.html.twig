@@ -1,0 +1,163 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block body %}
+
+{# TOP SHIT #}
+<div class="flex" style=" justify-content: center; align-items: center; background-color: #1E1E18; padding-top: 4rem; padding-bottom: 2rem;">
+    <div class="flex" style="flex-direction: column;">
+        <a href="{{ path('home_index') }}" 
+            class="flex items-center gap-2 font-semibold px-4 py-2 rounded-md 
+                text-white hover:text-black
+                hover:bg-[rgb(251,165,3)] 
+                transition-colors"
+            style="align-self: flex-start;">
+            <img src="{{ asset('images/navbar/LogOut.svg') }}" alt="Sign Out" class="w-4 h-4">
+            Back to Home
+        </a>
+
+        <div class="flex" style="width: 750px; margin-top: 1rem;">
+            <div class="rounded-full bg-[#FBA503] flex items-center justify-center text-2xl font-bold text-black" style="width: 5.5rem; height: 5.5rem; margin-right: 1.8rem;">
+                {{ app.user.fullName|slice(0, 1)|upper }}
+            </div>
+
+            <div class="flex justify-center" style="flex-direction: column;">
+                <h1 class="text-white text-3xl font-bold">My Account</h1>
+                <p class="text-white">Manage your account settings and preferences</p>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+{# MAIN BOTTOM #}
+<div class="flex" style="background-color: #F4ECE4; justify-content: center; align-items: center; flex-direction: column;">
+    {# PROFILE INFORMATION CARD #}
+    <div class="bg-white shadow rounded-xl p-6 mb-5" style="width: 750px; margin-top: 2rem;">
+
+        <div class="flex justify-between items-center mb-4">
+            <div>
+                <h2 class="text-lg font-semibold">Profile Information</h2>
+                <p class="text-gray-600 mb-4 text-sm">Update your account details</p>
+            </div>
+
+            {# EDIT BUTTON (VISIBLE BY DEFAULT) #}
+            <button 
+                id="editBtn"
+                class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
+                Edit Profile
+            </button>
+        </div>
+
+
+        {# INPUTS #}
+        <form action="{{ path('account_updateuser') }}" method="POST">
+            <input type="hidden" name="_token" value="{{ csrf_token('updateProfile_accounts') }}">
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm text-gray-700 mb-1">Full Name</label>
+                    <input 
+                        id="fullNameInput"
+                        name="fullName"
+                        value="{{ app.user.fullName }}"
+                        type="text"
+                        class="w-full border border-gray-300 rounded-md px-3 py-2"
+                        required>
+                </div>
+
+                <div>
+                    <label class="block text-sm text-gray-700 mb-1">Email Address</label>
+                    <input 
+                        id="emailInput"
+                        name="email"
+                        value="{{ app.user.email }}"
+                        type="text"
+                        class="w-full border border-gray-300 rounded-md px-3 py-2"
+                        required>
+                </div>  
+
+                <div> 
+                    <label class="block text-sm text-gray-700 mb-1">Member Since</label> 
+                    <input value="{{ app.user.createdAt|date('F j, Y') }}" type="text" class="w-full border border-gray-300 rounded-md px-3 py-2" disabled> 
+                </div>
+            </div>
+
+            <div 
+                id="editActions"
+                class="flex justify-end space-x-3 mt-6 hidden">
+                <button id="cancelBtn" type="reset" class="px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-100">
+                    Cancel
+                </button>
+
+                <button id="saveBtn" type="submit" class="px-4 py-2 text-black rounded-md bg-[rgb(251,165,3)] hover:bg-[rgb(252,175,36)] transition-colors">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+
+
+    {# PASSWORD SECURITY CARD #}
+    <div class="bg-white shadow rounded-xl p-6 mb-[190px]" style="width: 750px;">
+        <div class="flex justify-between items-center mb-4">
+            <div>
+                <h2 class="text-lg font-semibold">Password & Security</h2>
+                <p class="text-gray-600 mb-4 text-sm">Change your password to keep your account secure</p>
+            </div>
+            <button id="changePasswordBtn" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
+                Change Password
+            </button>
+        </div>
+
+        <form method="POST" action="{{ path('account_update_password') }}">
+            <input type="hidden" name="_token" value="{{ csrf_token('updatePassword') }}">
+            <div class="space-y-4">
+                {% for field in ['Current Password', 'New Password', 'Confirm New Password'] %}
+                    <div class="relative">
+                        <label class="block text-sm text-gray-700 mb-1">{{ field }}</label>
+                        <input 
+                            name="{{ field|lower|replace({' ': '_'}) }}"
+                            placeholder="Enter {{ field|lower }}"
+                            type="password"
+                            class="password-input w-full border border-gray-300 rounded-md px-3 py-2"
+                            disabled
+                            required>
+                        <img 
+                            src="{{ asset('images/partials/eye.svg') }}"
+                            data-eye="{{ asset('images/partials/eye.svg') }}"
+                            data-eye-off="{{ asset('images/partials/eyeOff.svg') }}"
+                            alt="Eye Icon"
+                            class="eye-toggle absolute right-4 top-9 text-gray-500 cursor-pointer"
+                            style="width: 20px; height: 20px;">
+                    </div>
+                {% endfor %}
+            </div>
+        
+
+            <div id="passwordRules" class="text-sm text-gray-700" style="margin-top: 1rem;">
+                <p class="font-semibold mb-2">Password Requirements:</p>
+                <ul class="list-disc pl-6 space-y-1">
+                    <li>At least 6 characters long</li>
+                    <li>Different from your current password</li>
+                </ul>
+            </div>
+
+            <div id="passwordActions" class="flex justify-end space-x-3 mt-6 hidden">
+                <button 
+                    type="button"
+                    id="cancelBtn_password" 
+                    class="px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-100">
+                    Cancel
+                </button>
+
+                <button 
+                    type="submit"
+                    class="px-4 py-2 text-black rounded-md bg-[rgb(251,165,3)] hover:bg-[rgb(252,175,36)] transition-colors">
+                    Update Password
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

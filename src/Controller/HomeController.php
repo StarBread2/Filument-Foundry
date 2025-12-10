@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 final class HomeController extends AbstractController
 {
     #[Route('/home', name: 'home_index')]
@@ -21,5 +23,4 @@ final class HomeController extends AbstractController
     {
         return $this->redirectToRoute('home_index');
     }
-
 }

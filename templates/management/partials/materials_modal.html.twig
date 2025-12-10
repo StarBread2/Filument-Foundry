@@ -17,6 +17,7 @@
         <p class="text-sm text-gray-600 mb-4">Add material details for the catalog</p>
 
         <form method="POST" action="{{ path('management_add_material') }}" enctype="multipart/form-data" class="space-y-4 grid grid-cols-2 gap-4">
+            <input type="hidden" name="_token" value="{{ csrf_token('add_material') }}">
             {# left column #}
             <div class="space-y-4">
                 <!-- Material Name -->
@@ -42,7 +43,7 @@
             </div>
 
             {# right column #}
-            <div class="space-y-4" style="margin-top: -0rem;">
+            <div class="space-y-4" style="margin-top: 1rem;">
                 <!-- Properties -->
                 <div>
                     <label class="block text-sm font-medium mb-1">Properties (comma-separated)</label>
@@ -83,8 +84,6 @@
                     </button>
                 </div>
             </div>
-
-            
         </form>
     </div>
 </div>
@@ -141,6 +140,7 @@
         <p class="text-sm text-gray-600 mb-4">Update the material details below</p>
 
         <form id="editMaterialForm" method="POST" action="" enctype="multipart/form-data" class="space-y-4 grid grid-cols-2 gap-4">
+            <input type="hidden" name="_token" value="{{ csrf_token('edit_material') }}">
             {# left column #}
             <div class="space-y-4">
                 <!-- Material Name -->
@@ -165,7 +165,7 @@
                 </div>
             </div>
             {# right column #}
-            <div class="space-y-4" style="margin-top: -0rem;">
+            <div class="space-y-4" style="margin-top: 1rem;">
                 <!-- Properties -->
                 <div>
                     <label class="block text-sm font-medium mb-1">Properties (comma-separated)</label>

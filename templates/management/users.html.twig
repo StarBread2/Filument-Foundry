@@ -76,71 +76,91 @@
                 </div>
             </div>
         </div>
-
+        
         <!-- Users Table -->
         <div class="bg-white rounded-lg shadow overflow-hidden mt-6">
             <table id="usersTable" class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-white">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Full Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-1/3">Full Name</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Email</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Address</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Role</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Registered</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Orders</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
                         <th class="px-6 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
+
                 <tbody class="divide-y divide-gray-100">
                     {% for user in users %}
-                    <tr class="hover:bg-[#F9F5F1]  transition-colors">
-                        <td class="px-6 py-4 font-medium text-gray-900">{{ user.fullName }}</td>
+                    <tr class="hover:bg-[#F9F5F1] transition-colors">
+                        <td class="px-6 py-4 font-medium text-gray-900 w-1/3">{{ user.fullName }}</td>
                         <td class="px-6 py-4 text-gray-700">{{ user.email }}</td>
                         <td class="px-6 py-4 text-gray-700 truncate max-w-[200px]" title="{{ user.address }}">{{ user.address }}</td>
+                        <!-- ROLE -->
                         <td class="px-6 py-4">
                             {% if 'ROLE_ADMIN' in user.roles %}
                                 <span class="bg-[rgb(18,156,221)] text-white text-xs font-bold px-5 py-2 rounded-full">admin</span>
-                            {% elseif 'ROLE_WORKER' in user.roles  %}
+                            {% elseif 'ROLE_WORKER' in user.roles %}
                                 <span class="bg-[rgb(251,165,3)] text-black text-xs font-bold px-4 py-2 rounded-full">worker</span>
-                            {% else %} 
+                            {% else %}
                                 <span class="bg-black text-white text-xs font-bold px-4 py-2 rounded-full">customer</span>
                             {% endif %}
                         </td>
+
                         <td class="px-6 py-4 text-gray-600">{{ user.createdAt|date('m/d/Y') }}</td>
                         <td class="px-6 py-4 text-gray-700 text-center">{{ user.userOrders|length }}</td>
+                        <!-- STATUS -->
+                        <td class="px-6 py-4">
+                            {% if user.active %}
+                                <span class="bg-[rgb(251,165,3)] text-black text-xs font-bold px-4 py-2 rounded-full">
+                                    Active
+                                </span>
+                            {% else %}
+                                <span class="bg-black text-white text-xs font-bold px-4 py-2 rounded-full">
+                                    Disabled
+                                </span>
+                            {% endif %}
+
+                        </td>
+
                         <td class="px-6 py-4 text-right flex justify-end gap-3">
                             <!-- EDIT BUTTON -->
                             <button
                                 type="button"
-                                class="editUserBtn border border-gray-400 px-2 py-2 rounded-xl font-medium flex items-center gap-2 text-black
-                                bg-[#f5ede5] hover:bg-[rgb(251,165,3)] transition-colors"
+                                class="editUserBtn border border-gray-400 px-2 py-2 rounded-xl font-medium flex items-center gap-2 text-black bg-[#f5ede5] hover:bg-[rgb(251,165,3)] transition-colors"
                                 data-id="{{ user.id }}"
                                 data-email="{{ user.email }}"
                                 data-fullname="{{ user.fullName }}"
                                 data-address="{{ user.address }}"
-                                data-role="{{ user.isAdmin ? 'admin' : 'customer' }}">
+                                data-role="{{ user.isAdmin ? 'admin' : 'customer' }}"
+                                data-active="{{ user.active ? '1' : '0' }}"
+                            >
                                 <img src="{{ asset('images/admin/edit.svg') }}" alt="Edit Icon" class="w-4 h-4">
                             </button>
 
                             <!-- DELETE BUTTON -->
                             <button
                                 type="button"
-                                class="deleteUserBtn border border-gray-400 px-2 py-2 rounded-xl font-medium flex items-center gap-2 text-black
-                                bg-[#f5ede5] hover:bg-[rgb(251,165,3)] transition-colors"
+                                class="deleteUserBtn border border-gray-400 px-2 py-2 rounded-xl font-medium flex items-center gap-2 text-black bg-[#f5ede5] hover:bg-[rgb(251,165,3)] transition-colors"
                                 data-delete-url="{{ path('management_delete_user', { id: user.id }) }}"
-                                data-username="{{ user.fullName }}">
+                                data-username="{{ user.fullName }}"
+                            >
                                 <img src="{{ asset('images/admin/trash 2.svg') }}" alt="Trash Icon" class="w-4 h-4">
                             </button>
                         </td>
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="7" class="px-6 py-4 text-center text-gray-500">No users found.</td>
+                        <td colspan="8" class="px-6 py-4 text-center text-gray-500">No users found.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
+
 
 
     </main>

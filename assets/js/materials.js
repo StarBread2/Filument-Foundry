@@ -134,6 +134,7 @@ document.addEventListener("DOMContentLoaded", () =>
                 btn.addEventListener("click", () => 
                 {
                     const id = btn.dataset.id;
+                    console.log("btn.dataset.name", btn.dataset.name)
                     const name = btn.dataset.name;
                     const details = btn.dataset.details;
                     const price = btn.dataset.price;

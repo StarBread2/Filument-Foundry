@@ -20,7 +20,7 @@
 
             <!-- Desktop Nav Links -->
             <div class="hidden md:flex items-center space-x-8 text-gray-800">
-                <a href="#home" class="transition-colors hover:text-[rgb(18,156,221)]">Home</a>
+                <a href="{{ path('home_index') }}" class="transition-colors hover:text-[rgb(18,156,221)]">Home</a>
                 <a href="#materials" class="transition-colors hover:text-[rgb(18,156,221)]">Materials</a>
                 <a href="#about" class="transition-colors hover:text-[rgb(18,156,221)]">About Us</a>
             </div>
@@ -50,21 +50,23 @@
                         </form>
                     
                         {# User Avatar and First Name #}
-                        <div class="flex items-center gap-2 px-3 py-1 text-sm bg-gray-100 rounded-md">
-                            {# Circle Avatar with First Letter #}
-                            <div class="flex items-center justify-center w-6 h-6 bg-black text-white rounded-full font-semibold">
-                                {{ app.user.fullName|slice(0,1)|upper }}
+                        <a href="{{ path('app_account')}}">
+                            <div class="flex items-center gap-2 px-3 py-1 text-sm bg-gray-100 rounded-md">
+                                {# Circle Avatar with First Letter #}
+                                <div class="flex items-center justify-center w-6 h-6 bg-black text-white rounded-full font-semibold">
+                                    {{ app.user.fullName|slice(0,1)|upper }}
+                                </div>
+                                {# Display First Name only (before first space) add (admin) if admin #}
+                                <span>
+                                    {{ app.user.fullName|split(' ')[0]|capitalize }}
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        (admin)
+                                    {% elseif is_granted('ROLE_WORKER') %}
+                                        (worker)
+                                    {% endif %}
+                                </span>
                             </div>
-                            {# Display First Name only (before first space) add (admin) if admin #}
-                            <span>
-                                {{ app.user.fullName|split(' ')[0]|capitalize }}
-                                {% if is_granted('ROLE_ADMIN') %}
-                                    (admin)
-                                {% elseif is_granted('ROLE_WORKER') %}
-                                    (worker)
-                                {% endif %}
-                            </span>
-                        </div>
+                        </a>
                     {% else %}
                         <a href="{{ path('app_login') }}">
                             <button class="flex items-center gap-2 rounded-md px-3 py-2 text-sm 

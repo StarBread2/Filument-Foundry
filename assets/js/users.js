@@ -71,18 +71,49 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (editModal && formEdit) {
             document.querySelectorAll(".editUserBtn").forEach(button => {
-                button.addEventListener("click", () => {
-                    const { id, email, fullname, address, role } = button.dataset;
+            button.addEventListener("click", () => {
+                const { id, email, fullname, address, role, active } = button.dataset;
 
-                    document.getElementById("edit-email").value = email;
-                    document.getElementById("edit-fullName").value = fullname;
-                    document.getElementById("edit-address").value = address;
-                    document.getElementById("edit-role").value = role;
+                document.getElementById("edit-email").value = email;
+                document.getElementById("edit-fullName").value = fullname;
+                document.getElementById("edit-address").value = address;
+                document.getElementById("edit-role").value = role;
 
-                    formEdit.action = `/management/edit-user/${id}`;
-                    editModal.classList.remove("hidden");
-                });
+                // ✅ Set the Status select default value
+                document.getElementById("edit-active").value = active; // "1" or "0"
+
+                formEdit.action = `/management/edit-user/${id}`;
+                editModal.classList.remove("hidden");
             });
+        });
+
+        const roleSelect = document.getElementById("edit-role");
+        const activeSelect = document.getElementById("edit-active");
+
+        // Confirm admin
+        formEdit.addEventListener("submit", (e) => {
+            const role = roleSelect.value;
+            const active = activeSelect.value;
+
+            // Trying to deactivate an admin
+            if (role === "admin" && active === "0") {
+                const confirmed = confirm("⚠️ You are about to deactivate an admin account. Are you sure?");
+                if (!confirmed) {
+                    e.preventDefault(); // Stop form submission
+                    activeSelect.value = "1"; // Reset to active
+                    return false;
+                }
+            }
+
+            // Setting user as admin
+            if (role === "admin" && active === "1") {
+                const confirmed = confirm("⚠️ You are giving full admin access. Proceed?");
+                if (!confirmed) {
+                    e.preventDefault();
+                    return false;
+                }
+            }
+        });
 
             [closeEdit, cancelEdit].forEach(btn =>
                 btn?.addEventListener("click", () => editModal.classList.add("hidden"))

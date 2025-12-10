@@ -12,27 +12,29 @@
         {% endblock %}
 
         {% block javascripts %}
+            <script src="//unpkg.com/alpinejs" defer></script>
             <!-- jQuery (required for DataTables) -->
             <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
             <!-- DataTables JS -->
             <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
     <body>
         <!-- Admin Modals CURRENT ROUTE USED BY NAVBAR IS HERE -->
         {% set currentRoute = app.request.attributes.get('_route') %}
-
+        {# 'management/partials/orders_modal.html.twig' #}
         {% set modals = 
         {
             'management_dashboard': ['management/partials/materials_modal.html.twig', 'management/partials/finishes_modal.html.twig', 'management/partials/colors_modal.html.twig'],
+            'management_orders': ['management/partials/orders_modal.html.twig'], 
             'management_users': ['management/partials/users_modal.html.twig'],
             'management_materials': ['management/partials/materials_modal.html.twig'],
             'management_finishes': ['management/partials/finishes_modal.html.twig'],
             'management_colors': ['management/partials/colors_modal.html.twig'],
             'app_login': [],
-            'app_register': []
+            'app_register': [],
+            'app_account': [],
         } %}
 
         {% if modals[currentRoute] is defined %}
@@ -46,12 +48,12 @@
         <!-- Nav Bar admin NAAY WALA NA CLOSE NA DIV!!!!, (CLOSE EVERY MAIN CONTENT)-->
             {% set admin_routes = [
                 'management_dashboard', 'management_orders', 'management_products', 'management_users',
-                'management_materials', 'management_finishes', 'management_colors', 'management_settings'
+                'management_materials', 'management_finishes', 'management_colors', 'management_settings', 'management_log'
             ] %}
 
             {# STANDALONE PAGES (NO NAVBAR) #}
             {% set standAlone_routes = [
-                'app_login', 'app_register'
+                'app_login', 'app_register', '404_index', 'app_account',
             ] %}
 
             {% if app.request.attributes.get('_route') in admin_routes %}
@@ -89,14 +91,32 @@
             {% endif %}
 
         {# RENDER ALL ERROS (BROWSER DEFAULT) #}
-        {% for label, messages in app.flashes %}
-            {% for message in messages %}
-                <script>
-                    alert("{{ label|capitalize }}: {{ message|e('js') }}");
-                </script>
+        <div id="flash-messages" class="fixed top-4 right-4 space-y-2 z-50">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div 
+                        style="
+                            padding: 0.5rem 1rem;
+                            border-radius: 0.5rem;
+                            color: white;
+                            background-color: {% if label == 'success' %}#22c55e{% elseif label == 'error' %}#ef4444{% else %}#6b7280{% endif %};
+                            position: fixed;
+                            top: 1rem;
+                            right: -300px; /* start off-screen */
+                            z-index: 9999;
+                            opacity: 0;
+                            transition: all 0.5s ease;
+                        "
+                        x-data="{ show: false }"
+                        x-show="show"
+                        @click="show = false"
+                        x-init="show = true; $el.style.right = '1rem'; $el.style.opacity = 1; setTimeout(() => { $el.style.right = '-300px'; $el.style.opacity = 0; }, 3000)">
+                        {{ message }}
+                    </div>
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
-
+        </div>
+        {# alert("{{ label|capitalize }}: {{ message|e('js') }}"); //ALERT FROM BROWSER #}
 
     </body>
 </html>

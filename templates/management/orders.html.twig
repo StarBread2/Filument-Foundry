@@ -2,13 +2,35 @@
 
 {% block title %}Filument Foundry: Admin{% endblock %}
 
+{% set orderStatusStyles = {
+    'pending':    { bg: '#FEF3C6', color: '#AE5200' },
+    'processing': { bg: '#F3E8FF', color: '#7F11B0' },
+    'printing':   { bg: '#DBEAFE', color: '#1D4ED8' },
+    'shipped':    { bg: '#DBFCE7', color: '#246648' },
+    'delivered':  { bg: '#DBFCE7', color: '#246648' },
+    'cancelled':  { bg: '#FFE2E2', color: '#AB0712' }
+} %}
+
 {% block body %}
     <div class="flex-1 flex flex-col bg-[#f5ede5]">
         <main class="p-6 space-y-6">
-            <!-- Header -->
-            <div class="space-y-2">
-                <h1 class="text-3xl font-extrabold text-gray-900 mb-0">Orders Management</h1>
-                <p class="text-gray-600 text-base mt-0">Track and manage customer orders</p>
+            <div class="flex justify-between items-center">
+                <!-- Header -->
+                <div class="space-y-1">
+                    <h1 class="text-3xl font-extrabold text-gray-900 mb-0">Orders Management</h1>
+                    <p class="text-gray-600 text-base mt-0">Track and manage customer orders</p>
+                </div>
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    <!-- Add User Button -->
+                    <button
+                        id="add-order-btn"
+                        style="background-color: #1E1E18;"
+                        class="text-white px-4 py-2 rounded-lg flex items-center hover:bg-gray-800 transition gap-2">
+                        <img src="{{ asset('images/admin/Plus.svg') }}" alt="Add Icon" class="w-4 h-4">
+                        Add Order
+                    </button>
+                {% endif %}
             </div>
 
             <!-- DASHBOARD STATS -->
@@ -20,7 +42,7 @@
                     <div class="bg-white p-4 rounded-xl shadow flex items-center justify-between">
                         <div>
                             <p class="text-gray-500 text-sm">Total Orders</p>
-                            <h2 class="text-2xl font-bold text-gray-900 mt-1">4</h2>
+                            <h2 class="text-2xl font-bold text-gray-900 mt-1">{{ totalOrders }}</h2>
                         </div>
                         <img src="{{ asset('images/orders/orders.svg') }}"
                             alt="Orders Icon"
@@ -31,7 +53,7 @@
                     <div class="bg-white p-4 rounded-xl shadow flex items-center justify-between">
                         <div>
                             <p class="text-gray-500 text-sm">Printing</p>
-                            <h2 class="text-2xl font-bold text-gray-900 mt-1">1</h2>
+                            <h2 class="text-2xl font-bold text-gray-900 mt-1">{{ countPrinting }}</h2>
                         </div>
                         <img src="{{ asset('images/orders/print.svg') }}"
                             alt="Printing Icon"
@@ -42,7 +64,7 @@
                     <div class="bg-white p-4 rounded-xl shadow flex items-center justify-between">
                         <div>
                             <p class="text-gray-500 text-sm">Cancelled</p>
-                            <h2 class="text-2xl font-bold text-gray-900 mt-1">2</h2>
+                            <h2 class="text-2xl font-bold text-gray-900 mt-1">{{ countCancelled }}</h2>
                         </div>
                         <img src="{{ asset('images/orders/cancel.svg') }}"
                             alt="Cancelled Icon"
@@ -53,7 +75,7 @@
                     <div class="bg-white p-4 rounded-xl shadow flex items-center justify-between">
                         <div>
                             <p class="text-gray-500 text-sm">Completed</p>
-                            <h2 class="text-2xl font-bold text-gray-900 mt-1">1</h2>
+                            <h2 class="text-2xl font-bold text-gray-900 mt-1">{{ countCompleted }}</h2>
                         </div>
                         <img src="{{ asset('images/orders/check.svg') }}"
                             alt="Completed Icon"
@@ -65,27 +87,36 @@
             <!-- SEARCH + FILTER -->
             <div class="flex items-center justify-between mt-4 gap-3">
                 <!-- Search Input -->
-                <div class="flex items-center bg-white px-4 py-2 rounded-xl shadow w-full">
+                <div class="flex items-center bg-white px-4 py-2 rounded-xl shadow " style="width: 73%;">
                     <img src="{{ asset('images/partials/search.svg') }}"
                         alt="Orders Icon"
                         style="width: 20px; height: 20px; margin-right: 20px;">
-                    <input type="text"
+                    <input 
+                        type="text"
                         placeholder="Search orders..."
-                        class="w-full focus:outline-none text-gray-700" />
+                        class="w-full focus:outline-none text-gray-700" 
+                    />
                 </div>
 
                 {# SEARCH #}
                 <div class="relative inline-block">
                     <!-- Status Filter -->
-                    <select class="ml-4 bg-white px-4 py-2 rounded-xl shadow text-gray-700 appearance-none" style="padding-right: 3rem;"> 
-                        <option>All Status</option>
-                        <option>Pending</option>
-                        <option>Processing</option>
-                        <option>Printing</option>
-                        <option>Shippped</option>
-                        <option>Delivered</option>
-                        <option>Cancelled</option>
-                    </select>
+                    <div class="flex justify-between items-center">
+                        <p>Order Status:</p>
+                        <!-- SHOW by Status Filter -->
+                        <select 
+                            class="ml-4 bg-white px-4 py-2 rounded-xl shadow text-gray-700 appearance-none" style="padding-right: 3rem;"
+                            onchange="window.location='?status=' + this.value + '&sort={{ sort }}'"
+                        > 
+                            <option value="all"       {{ status == 'all' ? 'selected' }} >All Status</option>
+                            <option value="pending"   {{ status == 'pending' ? 'selected' }} >Pending</option>
+                            <option value="processing"{{ status == 'processing' ? 'selected' }} >Processing</option>
+                            <option value="printing"  {{ status == 'printing' ? 'selected' }} >Printing</option>
+                            <option value="shipped"   {{ status == 'shipped' ? 'selected' }} >Shipped</option>
+                            <option value="delivered" {{ status == 'delivered' ? 'selected' }} >Delivered</option>
+                            <option value="cancelled" {{ status == 'cancelled' ? 'selected' }} >Cancelled</option>
+                        </select>
+                    </div>
                     <!-- Custom arrow -->
                     <div style="pointer-events: none; position: absolute; top: 0; bottom: 0; right: 0.5rem; display: flex; align-items: center;">
                         <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -97,130 +128,177 @@
 
             <!-- ORDERS LIST WRAPPER -->
             <div class="bg-white p-6 rounded-xl shadow space-y-4">
-
-                <h2 class="text-lg font-semibold mb-1">Orders List</h2>
-
-                <!-- ORDER ITEM -->
-                <div 
-                    class="p-4 rounded-xl border shadow-sm flex justify-between items-center"
-                    style="background-color: #ffffff;"
-                    onmouseover="this.style.backgroundColor='#F9F5F1';"
-                    onmouseout="this.style.backgroundColor='#ffffff';"
-                >
-                    <div style="padding-right: 2rem;">
-                        <div class="flex items-center gap-4">
-                            <h3 class="font-bold text-gray-900">ORD-001</h3>
-
-                            <div class="flex items-center">
-                                <span 
-                                    class="px-3 py-1 text-xs rounded-full"
-                                    style="background-color: #FEF3C6; color: #AE5200;"
-                                >
-                                    Pending
-                                </span>
-                                {# <div>
-                                    <span 
-                                        class="px-3 py-1 text-xs rounded-full"
-                                        style="background-color: #F3E8FF; color: #7F11B0;"
-                                    >
-                                        Processing
-                                    </span>
-
-                                    <span  
-                                        class="px-3 py-1 text-xs rounded-full"
-                                        style="background-color: #DBEAFE; color: #1D4ED8;"
-                                    >
-                                        Printing
-                                    </span>
-
-                                    <span 
-                                        class="px-3 py-1 text-xs rounded-full"
-                                        style="background-color: #DBFCE7; color: #246648;"
-                                    >
-                                        Shipped
-                                    </span>
-
-                                    <span 
-                                        class="px-3 py-1 text-xs rounded-full"
-                                        style="background-color: #DBFCE7; color: #246648;"
-                                    >
-                                        Delievered
-                                    </span>
-
-                                    <span 
-                                        class="px-3 py-1 text-xs rounded-full"
-                                        style="background-color: #FFE2E2; color: #AB0712;"
-                                    >
-                                        Cancel
-                                    </span>
-                                </div> #}
-                            </div>
-                        </div>
-                        
-
-                        <p 
-                            class="flex flex-wrap items-center text-sm text-gray-700 gap-4 mt-3"
-                            style="column-gap: 1rem; row-gap: 0.2rem;"
-                        >
-                            <span><span class="font-semibold">Customer:</span> John Doe</span>
-                            <span><span class="font-semibold">Project:</span> Custom Phone Case</span>
-                            <span><span class="font-semibold">Quantity:</span> 3</span>
-                            <span><span class="font-semibold">Total:</span> 1000.25</span>
-                            <span><span class="font-semibold">Model Multiplier:</span> 0.25</span>
-                        </p>
-
-                        <p class="text-sm text-gray-500 mt-1">
-                            Delivery: 2024-01-22
-                        </p>
+                
+                <!-- SORT BY TABLE COLUMN -->
+                <div class="flex justify-between items-center">
+                    <h2 class="text-lg font-semibold mb-1">Orders List</h2>
+                    <div class="flex justify-between items-center">
+                        <p>Sort by:</p>
+                        <!-- SORT BY TABLE COLUMN GET AND USERREPOSITORY-->
+                        <select 
+                            class="ml-4 bg-white px-4 py-2 rounded-xl shadow text-gray-700 appearance-none" style="padding-right: 3rem;"
+                            onchange="window.location='?sort=' + this.value + '&status={{ status }}'"
+                        > 
+                            <option value="id"               {{ sort == 'id' ? 'selected' }}>Order Number</option>
+                            <option value="material"         {{ sort == 'material' ? 'selected' }}>Material</option>
+                            <option value="finish"           {{ sort == 'finish' ? 'selected' }}>Finish</option>
+                            <option value="color"            {{ sort == 'color' ? 'selected' }}>Color</option>
+                            <option value="user"             {{ sort == 'user' ? 'selected' }}>User</option>
+                            <option value="delivery_date"    {{ sort == 'delivery_date' ? 'selected' }}>Delivery Date</option>
+                            <option value="delivery_arrival" {{ sort == 'delivery_arrival' ? 'selected' }}>Delivery Arrival</option>
+                            <option value="price"            {{ sort == 'price' ? 'selected' }}>Price</option>
+                            <option value="quantity"         {{ sort == 'quantity' ? 'selected' }}>Quantity</option>
+                            <option value="model_multiplier" {{ sort == 'model_multiplier' ? 'selected' }}>Model Multiplier</option>
+                            <option value="delivery_location"{{ sort == 'delivery_location' ? 'selected' }}>Delivery Location</option>
+                            <option value="notes"            {{ sort == 'notes' ? 'selected' }}>Notes</option>
+                        </select>
                     </div>
-
-                    <div class="flex items-center gap-2">
-                        {# CUSTOM SELECT #}
-                        <div class="relative inline-block">
-                            <select class="bg-gray-100 px-3 py-2 rounded-lg appearance-none" style="padding-right: 3rem; border: 1px solid #D1D5DB;">
-                                <option>Pending</option>
-                                <option>Processing</option>
-                                <option>Printing</option>
-                                <option>Shippped</option>
-                                <option>Delivered</option>
-                                <option>Cancelled</option>
-                            </select>
-                            <!-- Custom arrow -->
-                            <div style="pointer-events: none; position: absolute; top: 0; bottom: 0; right: 0.5rem; display: flex; align-items: center;">
-                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </div>
-                        </div>
-
-                        <button 
-                            class="flex items-center gap-1 px-4 py-2 pr-3 rounded-lg transition-colors"
-                            style="background-color: #F4ECE4; border: 1px solid #D1D5DB;"
-                            onmouseover="this.style.backgroundColor='#FBA503';"
-                            onmouseout="this.style.backgroundColor='#F4ECE4';"
-                        >
-                            <img src="{{ asset('images/partials/eye.svg') }}"
-                                alt="Eye Icon"
-                                style="width: 18px; height: 18px; margin-right: 0.5rem"
-                            >
-                            Details
-                        </button>
-
-                        <!-- DELETE BUTTON -->
-                        <button
-                            type="button"
-                            class="px-2 py-3 rounded-lg font-medium flex items-center gap-2 transition-colors"
-                            style="background-color: #F4ECE4; border: 1px solid #D1D5DB;"
-                            onmouseover="this.style.backgroundColor='#FBA503';"
-                            onmouseout="this.style.backgroundColor='#F4ECE4';"
-                        >
-                            <img src="{{ asset('images/admin/trash 2.svg') }}" alt="Trash Icon" class="w-4 h-4">
-                        </button>
-                    </div>
+                    
                 </div>
+                
+                <!-- ORDER ITEM -->
+                {% for order in orders %}
+                    <div 
+                        class="order-item p-4 rounded-xl border shadow-sm flex justify-between items-center"
+                        style="background-color: #ffffff;"
+                        onmouseover="this.style.backgroundColor='#F9F5F1';"
+                        onmouseout="this.style.backgroundColor='#ffffff';"
+                    >
+                        <div style="padding-right: 2rem;">
+                            <div class="flex items-center gap-4">
+                                <h3 class="font-bold text-gray-900">ORD-{{ order.id }}</h3>
+
+                                {% set st = order.orderState.value %}
+                                <div class="flex items-center">
+                                    <span 
+                                        class="px-3 py-1 text-xs rounded-full"
+                                        style="background-color: {{ orderStatusStyles[st].bg }}; color: {{ orderStatusStyles[st].color }};"
+                                    >
+                                        {{ st|capitalize }}
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <p 
+                                class="flex flex-wrap items-center text-sm text-gray-700 gap-4 mt-3"
+                                style="column-gap: 1rem; row-gap: 0.2rem;"
+                            >
+                                <span><span class="font-semibold">Customer: </span> {{ order.user.fullName }}</span>
+                                <span><span class="font-semibold">Project: </span> {{ order.projectName }} </span>
+                                <span><span class="font-semibold">Quantity: </span>{{ order.quantity }}</span>
+                                <span><span class="font-semibold">Total: </span>{{ order.priceTotal }}</span>
+                                <span><span class="font-semibold">Model Multiplier: </span>{{ order.modelMultiplier }}</span>
+                            </p>
+
+                            <p class="text-sm text-gray-500 mt-2">
+                                Delivery: {{ order.deliveryDate ? order.deliveryDate|date('F j, Y, h:i A') : 'Not Yet' }}
+                            </p>
+
+                            <p class="text-sm text-gray-500">
+                                Arrival: {{ order.deliveryArrival ? order.deliveryArrival|date('F j, Y, h:i A') : 'Not Yet' }}
+                            </p>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            {# QUERY CHANGES AFTER MODAL CONFIRMATION #}
+                                {# CUSTOM SELECT GET AND USERREPOSITORY #}
+                                <div class="relative inline-block">
+                                    <select 
+                                        class="orderStatusSelect bg-gray-100 px-3 py-2 rounded-lg appearance-none" style="padding-right: 3rem; border: 1px solid #D1D5DB;"
+                                        data-order-id="{{ order.id }}"
+                                        data-current-status="{{ order.orderState.value }}"
+                                    >
+                                        {% for key, label in {
+                                            'pending':'Pending',
+                                            'processing':'Processing',
+                                            'printing':'Printing',
+                                            'shipped':'Shipped',
+                                            'delivered':'Delivered',
+                                            'cancelled':'Cancelled'
+                                        } %}
+                                            <option value="{{ key }}" {% if key == order.orderState.value %}selected{% endif %} >
+                                                {{ label }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                <!-- Custom arrow -->
+                                <div style="pointer-events: none; position: absolute; top: 0; bottom: 0; right: 0.5rem; display: flex; align-items: center;">
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            {# DETAILS BUTTON #}
+                            <button 
+                                class="orderDetailsBtn flex items-center gap-1 px-4 py-2 pr-3 rounded-lg transition-colors"
+
+                                data-order-id="{{ order.id }}"
+                                data-order-customer-name="{{ order.user.fullName }}"
+                                data-order-project-name="{{ order.projectName }}"
+                                data-order-user-email="{{order.user.email}}"
+                                data-order-user-address="{{order.user.address}}"
+                                data-order-quantity="{{ order.quantity }}"
+                                data-order-price-total="{{ order.priceTotal }}"
+                                data-order-model-multiplier="{{ order.modelMultiplier }}"
+                                {# THE BIG 3 ID LATER #}
+                                data-order-material-name="{{ order.material.name }}"
+                                data-order-finish-name="{{ order.finish.name }}"
+                                data-order-color-name="{{ order.color.name }}"
+                                data-order-material-id="{{ order.material.id }}"
+                                data-order-color-id="{{ order.color.id }}"
+                                data-order-finish-id="{{ order.finish.id }}"
+                                {# date #}
+                                data-order-created-at="{{ order.createdAt ? order.createdAt|date('Y-m-d H:i:s') : '' }}"
+                                data-order-notes="{{ order.notes ?: '' }}"
+                                data-order-delivery-date="{{ order.deliveryDate ? order.deliveryDate|date('Y-m-d H:i:s') : '' }}"
+                                data-order-delivery-arrival="{{ order.deliveryArrival ? order.deliveryArrival|date('Y-m-d H:i:s') : '' }}"
+                                {# IF U CAN EDIT THE DATA (IF STILL PENDING) #}
+                                data-order-state="{{ order.orderState.value }}"
+                                data-order-deliverylocation="{{ order.deliveryLocation }}"
 
 
+                                style="background-color: #F4ECE4; border: 1px solid #D1D5DB;"
+                                onmouseover="this.style.backgroundColor='#FBA503';"
+                                onmouseout="this.style.backgroundColor='#F4ECE4';"
+                            >
+                                <img src="{{ asset('images/partials/eye.svg') }}"
+                                    alt="Eye Icon"
+                                    style="width: 18px; height: 18px; margin-right: 0.5rem"
+                                >
+                                Details
+                            </button>
+
+                            <!-- DELETE BUTTON -->
+                            <button
+                                type="button"
+                                class="deleteOrderBtn px-2 py-3 rounded-lg font-medium flex items-center gap-2 transition-colors"
+                                data-order-id="{{ order.id }}"
+                                style="background-color: #F4ECE4; border: 1px solid #D1D5DB;"
+                                onmouseover="this.style.backgroundColor='#FBA503';"
+                                onmouseout="this.style.backgroundColor='#F4ECE4';"
+                            >
+                                <img src="{{ asset('images/admin/trash 2.svg') }}" alt="Trash Icon" class="w-4 h-4">
+                            </button>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                
+
+                {# NO ORDERS FOUND ENABLED IN JS #}
+                <div id="no-orders-found" class="text-center text-gray-500 py-6 hidden">
+                    No orders found.
+                </div>
             </div>
+
+                {# # OF PAGES MANUAL IN ORDER.JS KAPOY CODE #}
+                <!-- Pagination Controls -->
+                <div id="pagination-controls" class="flex justify-center mt-4 gap-2">
+                    <button id="prev-page" class="px-3 py-1 rounded bg-gray-200" disabled>Prev</button>
+                    <span id="page-info" class="px-3 py-1"></span>
+                    <button id="next-page" class="px-3 py-1 rounded bg-gray-200">Next</button>
+                </div>
         </main>
     </div>
 </div> <!-- NABILIN NA CLOSE FOR LEFT SIDEBAR -->

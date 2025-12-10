@@ -61,6 +61,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $active = true;
+
+    /**
+     * @var Collection<int, Log>
+     */
+    #[ORM\OneToMany(targetEntity: Log::class, mappedBy: 'user_id')]
+    private Collection $logs;
+
     public function __construct()
     {
         // Always initialize Doctrine collections
@@ -69,7 +78,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // default roles
         $this->roles = ['ROLE_USER'];
 
-        $this->createdAt = new \DateTime(); 
+        $this->createdAt = new \DateTime();
+        $this->logs = new ArrayCollection(); 
     }
 
     // ───────────────────────────────
@@ -222,6 +232,47 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function isActive(): bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): static
+    {
+        $this->active = $active;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Log>
+     */
+    public function getLogs(): Collection
+    {
+        return $this->logs;
+    }
+
+    public function addLogs(Log $logs): static
+    {
+        if (!$this->logs->contains($logs)) {
+            $this->logs->add($logs);
+            $logs->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLogs(Log $logs): static
+    {
+        if ($this->logs->removeElement($logs)) {
+            // set the owning side to null (unless already changed)
+            if ($logs->getUserId() === $this) {
+                $logs->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
 }
 
 
@@ -240,6 +291,8 @@ price_total (decimal(10,2))
 created_at (datetime)
 quantity (int)
 model_multiplier (double)
+notes (longtext)
+delivery_location (longtext)
 
 table name: user
 id (int)
@@ -276,13 +329,4 @@ price (double)
 image_path (varchar)
 availability (tinyint)
 color_hex (varchar(7))
-
-
-
-
-
-
-
-
-
  */

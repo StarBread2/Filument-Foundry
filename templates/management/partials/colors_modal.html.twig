@@ -16,6 +16,7 @@
         <p class="text-sm text-gray-600 mb-4">Add finishing details</p>
 
         <form method="POST" action="{{ path('management_add_colors') }}" enctype="multipart/form-data" class="space-y-4">
+            <input type="hidden" name="_token" value="{{ csrf_token('add_color') }}">
             <!-- Hidden field to store which option user chose -->
             <input type="hidden" name="appearance_type" id="appearanceType" value="">
 
@@ -128,6 +129,7 @@
 
         <!-- Form -->
         <form id="editColorForm" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="_token" value="{{ csrf_token('edit_color') }}">
             <div class="space-y-4">
                 <!-- Color Name -->
                 <div>

@@ -16,6 +16,7 @@
         <p class="text-sm text-gray-600 mb-4">Add a new user to the system</p>
 
         <form method="POST" action="{{ path('management_add_user') }}"  class="space-y-4 grid grid-cols-2 gap-4">
+            <input type="hidden" name="_token" value="{{ csrf_token('create_user') }}">
             {# left column #}
             <div class="space-y-4">
                 <div>
@@ -66,7 +67,7 @@
                 </div>
             </div>
             {# right column #}
-            <div class="space-y-4" style="margin-top: -0rem;">
+            <div class="space-y-4" style="margin-top: 1rem;">
                 <div>
                     <label class="block text-sm font-medium mb-1">Address *</label>
                     <input name="address" type="text" required placeholder="Enter full address"
@@ -152,6 +153,7 @@
         <p class="text-sm text-gray-600 mb-4">Update this user's information</p>
 
         <form id="editUserForm" method="POST" action="" class="space-y-4 grid grid-cols-2 gap-4">
+            <input type="hidden" name="_token" value="{{ csrf_token('edit_user') }}">
             {# left column #}
             <div class="space-y-4">
                 <div>
@@ -172,9 +174,18 @@
                         class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none">
                 </div>
 
+                <div>
+                    <label class="block text-sm font-medium mb-1">Status</label>
+                    <select id="edit-active" name="active"
+                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none">
+                        <option value="1">Active</option>
+                        <option value="0">Disabled</option>
+                    </select>
+                </div>
+
             </div>
             {# right column #}
-            <div class="space-y-4" style="margin-top: -0rem;">
+            <div class="space-y-4" style="margin-top: 1rem;">
                 <div>
                     <label class="block text-sm font-medium mb-1">Role</label>
                     <select id="edit-role" name="role"
