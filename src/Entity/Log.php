@@ -14,7 +14,7 @@ class Log
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'logs')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
     private ?User $user_id = null;
 
     #[ORM\Column(length: 255)]

@@ -71,28 +71,36 @@
 
                         <!-- FULL NAME -->
                         <td class="px-6 py-4 font-medium text-gray-900">
-                            {{ log.userId.fullName }}
+                            {{ log.userId ? log.userId.fullName : 'Deleted User' }}
                         </td>
 
                         <!-- EMAIL -->
                         <td class="px-6 py-4 text-gray-700">
-                            {{ log.userId.email }}
+                            {{ log.userId ? log.userId.email : '-' }}
                         </td>
 
                         <!-- ROLE -->
                         <td class="px-6 py-4">
-                            {% set roles = log.userId.roles %}
-                            {% if 'ROLE_ADMIN' in roles %}
-                                <span class="bg-[rgb(18,156,221)] text-white text-xs font-bold px-5 py-2 rounded-full">
-                                    admin
-                                </span>
-                            {% elseif 'ROLE_WORKER' in roles %}
-                                <span class="bg-[rgb(251,165,3)] text-black text-xs font-bold px-4 py-2 rounded-full">
-                                    worker
-                                </span>
+                            {% if log.userId %}
+                                {% set roles = log.userId.roles %}
+
+                                {% if 'ROLE_ADMIN' in roles %}
+                                    <span class="bg-[rgb(18,156,221)] text-white text-xs font-bold px-5 py-2 rounded-full">
+                                        admin
+                                    </span>
+                                {% elseif 'ROLE_WORKER' in roles %}
+                                    <span class="bg-[rgb(251,165,3)] text-black text-xs font-bold px-4 py-2 rounded-full">
+                                        worker
+                                    </span>
+                                {% else %}
+                                    <span class="bg-black text-white text-xs font-bold px-4 py-2 rounded-full">
+                                        customer
+                                    </span>
+                                {% endif %}
+                                
                             {% else %}
-                                <span class="bg-black text-white text-xs font-bold px-4 py-2 rounded-full">
-                                    customer
+                                <span class="px-6 py-4 font-medium text-gray-900">
+                                    -
                                 </span>
                             {% endif %}
                         </td>

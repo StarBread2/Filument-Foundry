@@ -1,7 +1,3 @@
-#https://chatgpt.com/c/68da2405-2b00-8328-8336-c8ba66181d61
-#Containers (transfer configurations to other machine)
-#docker file instucts to install dependencies
-
 services:
   mysql:
     image: mysql:8.0
